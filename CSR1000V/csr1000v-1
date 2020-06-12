@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 6818 bytes
+Current configuration : 7537 bytes
 !
-! Last configuration change at 13:10:31 UTC Thu Jun 11 2020 by developer
+! Last configuration change at 13:10:30 UTC Fri Jun 12 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -17,6 +17,18 @@ hostname csr1000v-1
 boot-start-marker
 boot-end-marker
 !
+!
+vrf definition MY-TEST-VRF1
+ description Configured by NETCONF by Amit
+ rd 100:1
+ route-target export 100:1
+ route-target import 100:1
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
 !
 no logging console
 enable secret 9 $9$PvdeTeuxxh0ygk$PSg0GTG2I7bluI51e.IvfEu2uxy56e/9/PgqzFUklso
@@ -80,6 +92,11 @@ crypto pki trustpoint SLA-TrustPoint
  enrollment pkcs12
  revocation-check crl
 !
+crypto pki trustpoint ProductionCA
+ enrollment url http://10.1.2.172:8080/ejbca/publicweb/apply/scep/ALGO/pkiclient.exe
+ serial-number
+ revocation-check none
+!
 !
 crypto pki certificate chain TP-self-signed-1059130051
  certificate self-signed 01
@@ -139,6 +156,7 @@ crypto pki certificate chain SLA-TrustPoint
   418616A9 4093E049 4D10AB75 27E86F73 932E35B5 8862FDAE 0275156F 719BB2F0 
   D697DF7F 28
   	quit
+crypto pki certificate chain ProductionCA
 !
 license udi pid CSR1000V sn 9BEY1ZT0GB4
 license boot level ax
@@ -179,6 +197,13 @@ redundancy
 ! 
 !
 !
+interface Loopback101
+ ip address 10.99.98.1 255.255.255.0
+ shutdown
+!
+interface Loopback1919
+ ip address 19.19.19.19 255.255.255.255
+!
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
@@ -189,7 +214,7 @@ interface GigabitEthernet1
 interface GigabitEthernet2
  description Network Interface
  no ip address
- shutdown
+ ip nat inside
  negotiation auto
  no mop enabled
  no mop sysid
@@ -197,10 +222,14 @@ interface GigabitEthernet2
 interface GigabitEthernet3
  description Network Interface
  no ip address
+ ip nat outside
  shutdown
  negotiation auto
  no mop enabled
  no mop sysid
+!
+router ospf 1
+ network 0.0.0.0 255.255.255.255 area 0
 !
 ip forward-protocol nd
 ip http server
@@ -215,6 +244,7 @@ ip scp server enable
 !
 !
 !
+snmp-server group TESTE-NMS v3 priv 
 !
 !
 !
@@ -236,11 +266,13 @@ Thanks for stopping by.
 !
 line con 0
  exec-timeout 0 0
+ logging synchronous
  stopbits 1
 line vty 0 4
  login local
  transport input ssh
 !
+ntp server 1.2.3.4
 !
 !
 !
