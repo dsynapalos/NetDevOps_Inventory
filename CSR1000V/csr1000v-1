@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7154 bytes
+Current configuration : 7132 bytes
 !
-! Last configuration change at 13:10:20 UTC Sun Jun 14 2020 by developer
+! Last configuration change at 13:10:48 UTC Mon Jun 15 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -140,7 +140,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9MKH579CKHN
+license udi pid CSR1000V sn 9KMIYU2MKF2
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -179,20 +179,17 @@ redundancy
 ! 
 !
 !
-interface Loopback103
- ip address 10.99.99.3 255.255.255.0
+interface Loopback111
+ description Configured and Merged by Ansible Network
+ no ip address
 !
-interface Loopback1001
- description new int lo1001
- ip address 1.0.0.1 255.255.255.255
+interface Loopback1174
+ description config by template
+ ip address 15.15.15.15 255.255.255.0
 !
-interface Loopback1002
- description new int lo1002
- ip address 1.0.0.2 255.255.255.255
-!
-interface Loopback9903
- description Another Network Interface Lo9903
- ip address 9.9.0.3 255.255.255.255
+interface Loopback2001
+ description TEST1
+ ip address 2.0.0.1 255.255.255.255
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -204,6 +201,7 @@ interface GigabitEthernet1
 interface GigabitEthernet2
  description Network Interface
  no ip address
+ shutdown
  negotiation auto
  no mop enabled
  no mop sysid
@@ -227,6 +225,8 @@ ip ssh version 2
 ip scp server enable
 !
 !
+ip access-list standard 1
+ deny   192.168.1.1
 !
 !
 !
