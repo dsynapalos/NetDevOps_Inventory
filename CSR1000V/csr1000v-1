@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 9041 bytes
+Current configuration : 9098 bytes
 !
-! Last configuration change at 13:10:24 UTC Tue Jun 16 2020 by developer
+! Last configuration change at 13:10:11 UTC Wed Jun 17 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -149,6 +149,7 @@ crypto pki certificate chain SLA-TrustPoint
 license udi pid CSR1000V sn 9KMIYU2MKF2
 license boot level ax
 diagnostic bootup level minimal
+file prompt quiet
 !
 spanning-tree extend system-id
 memory free low-watermark processor 80557
@@ -317,5 +318,6 @@ event manager applet config-check
 app-hosting appid guestshell
  app-vnic gateway0 virtualportgroup 0 guest-interface 0
   guest-ipaddress 192.168.1.2 netmask 255.255.255.0
+ app-vnic management guest-interface 0
  name-server0 8.8.8.8
 end
