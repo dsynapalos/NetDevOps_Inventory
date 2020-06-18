@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 9098 bytes
+Current configuration : 9830 bytes
 !
-! Last configuration change at 13:10:11 UTC Wed Jun 17 2020 by developer
+! Last configuration change at 13:05:01 UTC Thu Jun 18 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -186,9 +186,29 @@ redundancy
 ! 
 !
 !
+interface Loopback22
+ description Created with Ansible
+ no ip address
+!
 interface Loopback111
  description Configured and Merged by Ansible Network
  no ip address
+!
+interface Loopback555
+ description THIS IS A SAMPLE ONLY
+ no ip address
+!
+interface Loopback666
+ description ANOTHER TEST
+ no ip address
+!
+interface Loopback888
+ description THIS IS A SAMPLE LOOPBACK
+ ip address 1.1.1.1 255.255.255.255
+!
+interface Loopback999
+ description THIS IS A SAMPLE LOOPBACK
+ ip address 9.9.9.9 255.255.255.255
 !
 interface Loopback1000
  description DevNet
@@ -222,7 +242,6 @@ interface GigabitEthernet1.999
 interface GigabitEthernet2
  description Network Interface
  no ip address
- shutdown
  negotiation auto
  no mop enabled
  no mop sysid
@@ -299,8 +318,13 @@ line con 0
  stopbits 1
 line vty 0 4
  login local
+ length 0
  transport input ssh
 !
+ntp server 3.3.3.3
+ntp server 4.4.4.4
+ntp server 5.5.5.5
+ntp server 6.6.6.6
 !
 !
 !
@@ -315,6 +339,13 @@ event manager applet config-check
  action 6.0 end
 !
 !
+telemetry ietf subscription 102
+ encoding encode-kvgpb
+ filter xpath /interfaces-ios-xe-oper:interfaces/interface
+ source-address 10.10.20.48
+ stream yang-push
+ update-policy periodic 2000
+ receiver ip address 3.13.191.225 57000 protocol grpc-tcp
 app-hosting appid guestshell
  app-vnic gateway0 virtualportgroup 0 guest-interface 0
   guest-ipaddress 192.168.1.2 netmask 255.255.255.0
