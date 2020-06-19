@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 9830 bytes
+Current configuration : 7692 bytes
 !
-! Last configuration change at 13:05:01 UTC Thu Jun 18 2020 by developer
+! Last configuration change at 13:10:31 UTC Fri Jun 19 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -38,12 +38,6 @@ call-home
 !
 !
 ip domain name abc.inc
-!
-ip dhcp pool GLOBOMANTICS_VLAN20
- network 198.51.100.0 255.255.255.0
- default-router 198.51.100.254 
- dns-server 8.8.4.4 8.8.8.8 
- domain-name globomantics.com
 !
 !
 !
@@ -146,10 +140,9 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9KMIYU2MKF2
+license udi pid CSR1000V sn 9WL004T0H17
 license boot level ax
 diagnostic bootup level minimal
-file prompt quiet
 !
 spanning-tree extend system-id
 memory free low-watermark processor 80557
@@ -186,62 +179,21 @@ redundancy
 ! 
 !
 !
-interface Loopback22
- description Created with Ansible
+interface Loopback105
  no ip address
-!
-interface Loopback111
- description Configured and Merged by Ansible Network
- no ip address
-!
-interface Loopback555
- description THIS IS A SAMPLE ONLY
- no ip address
-!
-interface Loopback666
- description ANOTHER TEST
- no ip address
-!
-interface Loopback888
- description THIS IS A SAMPLE LOOPBACK
- ip address 1.1.1.1 255.255.255.255
-!
-interface Loopback999
- description THIS IS A SAMPLE LOOPBACK
- ip address 9.9.9.9 255.255.255.255
-!
-interface Loopback1000
- description DevNet
- no ip address
-!
-interface Loopback1174
- description config by template
- ip address 15.15.15.15 255.255.255.0
-!
-interface Loopback2001
- description TEST1
- ip address 2.0.0.1 255.255.255.255
-!
-interface VirtualPortGroup0
- ip address 192.168.1.1 255.255.255.0
- ip nat inside
- no mop enabled
- no mop sysid
+ shutdown
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
- ip nat outside
  negotiation auto
  no mop enabled
  no mop sysid
 !
-interface GigabitEthernet1.999
- encapsulation dot1Q 999
-!
 interface GigabitEthernet2
  description Network Interface
  no ip address
+ shutdown
  negotiation auto
  no mop enabled
  no mop sysid
@@ -254,44 +206,17 @@ interface GigabitEthernet3
  no mop enabled
  no mop sysid
 !
-iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
 ip http secure-server
-ip nat inside source list NAT-ACL interface GigabitEthernet1 overload
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
-ip route 192.0.2.0 255.255.255.0 GigabitEthernet1
-ip route 203.0.113.0 255.255.255.0 10.10.20.254
 !
 ip ssh rsa keypair-name ssh-key
 ip ssh version 2
 ip scp server enable
 !
 !
-ip access-list standard IBM-NMS-AES256-RW
- permit 10.201.144.98
- permit 10.101.128.16
-!
-ip access-list extended NAT-ACL
- permit ip 192.168.1.0 0.0.0.255 any
-ip access-list extended cust1-inbound-protection
- permit tcp 10.0.0.0 0.255.255.255 any established
- permit tcp 10.0.0.0 0.255.255.255 any eq 443
- permit tcp 10.0.0.0 0.255.255.255 any eq www
- permit udp 10.0.0.0 0.255.255.255 host 192.168.100.222 eq domain
- permit tcp 10.0.0.0 0.255.255.255 any ack
- permit icmp any any
- deny   ip any any
-ip access-list extended cust2-inbound-protection
- permit tcp 10.0.0.0 0.255.255.255 any ack
- permit tcp 10.0.0.0 0.255.255.255 any eq 443
- permit tcp 10.0.0.0 0.255.255.255 any eq www
- permit udp 10.0.0.0 0.255.255.255 host 192.168.100.222 eq domain
- permit icmp any any
- deny   ip any any
-ip access-list standard 1
- deny   192.168.1.1
 !
 !
 !
@@ -318,37 +243,33 @@ line con 0
  stopbits 1
 line vty 0 4
  login local
- length 0
  transport input ssh
 !
-ntp server 3.3.3.3
-ntp server 4.4.4.4
-ntp server 5.5.5.5
-ntp server 6.6.6.6
 !
 !
 !
 !
-event manager applet config-check
- event syslog pattern "SYS-5-CONFIG_I"
- action 1.0 cli command "enable"
- action 2.0 cli command "guestshell run python /home/guestshell/dne-dna-code/intro-guestshell/intro-on-box-python/conf_check.py --syslog"
- action 3.0 regexp "ERROR" "$_cli_result"
- action 4.0 if $_regexp_result eq "1"
- action 5.0  syslog msg "$_cli_result"
- action 6.0 end
 !
-!
-telemetry ietf subscription 102
+telemetry ietf subscription 101
+ encoding encode-kvgpb
+ filter xpath /memory-ios-xe-oper:memory-statistics/memory-statistic
+ source-vrf Mgmt-intf
+ stream yang-push
+ update-policy periodic 6000
+ receiver ip address 73.249.225.58 57000 protocol grpc-tcp
+telemetry ietf subscription 501
  encoding encode-kvgpb
  filter xpath /interfaces-ios-xe-oper:interfaces/interface
  source-address 10.10.20.48
  stream yang-push
+ update-policy periodic 500
+ receiver ip address 73.249.225.58 57000 protocol grpc-tcp
+telemetry ietf subscription 502
+ encoding encode-kvgpb
+ filter xpath /process-cpu-ios-xe-oper:cpu-usage/cpu-utilization/five-seconds
+ source-address 10.10.20.48
+ stream yang-push
  update-policy periodic 2000
- receiver ip address 3.13.191.225 57000 protocol grpc-tcp
-app-hosting appid guestshell
- app-vnic gateway0 virtualportgroup 0 guest-interface 0
-  guest-ipaddress 192.168.1.2 netmask 255.255.255.0
- app-vnic management guest-interface 0
- name-server0 8.8.8.8
+ receiver ip address 73.249.225.58 57000 protocol grpc-tcp
+ receiver ip address 73.249.225.58 57500 protocol grpc-tcp
 end
