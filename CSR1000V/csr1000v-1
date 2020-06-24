@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7933 bytes
+Current configuration : 8678 bytes
 !
-! Last configuration change at 13:10:39 UTC Tue Jun 23 2020 by developer
+! Last configuration change at 13:05:25 UTC Wed Jun 24 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -52,6 +52,12 @@ call-home
 !
 !
 ip domain name abc.inc
+ip dhcp excluded-address 10.1.1.1
+!
+ip dhcp pool pnp_device_pool
+ network 10.1.1.0 255.255.255.0
+ default-router 10.1.1.1 
+ option 67 ascii http://192.0.2.1:8000/sample_python_2.py
 !
 !
 !
@@ -69,6 +75,12 @@ subscriber templating
 ! 
 ! 
 !
+!
+ipv6 unicast-routing
+ipv6 dhcp pool ztp
+ address prefix 2001:DB8::1/64
+ domain-name cisco.com
+ bootfile-url tftp://[2001:db8::46]/sample_day0_script.py
 !
 multilink bundle-name authenticated
 !
@@ -196,6 +208,12 @@ redundancy
 interface Loopback1
  no ip address
 !
+interface Loopback10
+ no ip address
+!
+interface Loopback55
+ ip address 10.55.55.55 255.255.255.0
+!
 interface Loopback501
  description Configured by Ansible
  ip address 101.101.101.105 255.255.255.255
@@ -207,14 +225,14 @@ interface Loopback502
 !
 interface VirtualPortGroup0
  vrf forwarding GS
- ip address 192.168.35.101 255.255.255.0
+ ip address 192.168.35.1 255.255.255.0
  ip nat inside
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
- ip address 10.10.20.48 255.255.255.0
+ ip address 10.10.20.48 255.255.0.0
  ip nat outside
  negotiation auto
  no mop enabled
@@ -223,16 +241,19 @@ interface GigabitEthernet1
 interface GigabitEthernet2
  description Network Interface
  no ip address
- shutdown
  negotiation auto
+ ipv6 address 2002:DB8::1/64
+ ipv6 address autoconfig default
+ ipv6 enable
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet3
  description Network Interface
  no ip address
- shutdown
  negotiation auto
+ ipv6 address 2001:DB8::/64 eui-64
+ ipv6 enable
  no mop enabled
  no mop sysid
 !
@@ -241,8 +262,11 @@ ip forward-protocol nd
 ip http server
 ip http authentication local
 ip http secure-server
+ip nat inside source static tcp 192.168.35.2 7023 10.0.12.19 7023 extendable
 ip nat inside source list GS_NAT_ACL interface GigabitEthernet1 vrf GS overload
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
+ip route 0.0.0.0 0.0.0.0 10.0.0.1
+ip route 10.0.0.0 255.0.0.0 10.0.0.1
 ip route vrf GS 0.0.0.0 0.0.0.0 GigabitEthernet1 10.1.0.1 global
 !
 ip ssh rsa keypair-name ssh-key
@@ -252,6 +276,8 @@ ip scp server enable
 !
 ip access-list standard GS_NAT_ACL
  permit 192.168.35.0 0.0.0.255
+ip access-list standard NAT_ACL
+ permit 192.168.0.0 0.0.255.255
 !
 ip access-list extended test_replace_acl
  permit tcp 1.1.1.0 0.0.0.255 2.2.2.0 0.0.0.255 eq 22
