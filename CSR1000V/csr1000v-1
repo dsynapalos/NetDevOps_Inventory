@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 8678 bytes
+Current configuration : 7135 bytes
 !
-! Last configuration change at 13:05:25 UTC Wed Jun 24 2020 by developer
+! Last configuration change at 13:05:22 UTC Thu Jun 25 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -18,24 +18,10 @@ boot-start-marker
 boot-end-marker
 !
 !
-vrf definition GS
- !
- address-family ipv4
- exit-address-family
-!
 no logging console
 enable secret 9 $9$PvdeTeuxxh0ygk$PSg0GTG2I7bluI51e.IvfEu2uxy56e/9/PgqzFUklso
 !
-aaa new-model
-!
-!
-aaa authorization exec default local 
-!
-!
-!
-!
-!
-aaa session-id common
+no aaa new-model
 call-home
  ! If contact email address in call-home is configured as sch-smart-licensing@cisco.com
  ! the email address configured in Cisco Smart License Portal will be used as contact email address to send SCH notifications.
@@ -52,12 +38,8 @@ call-home
 !
 !
 ip domain name abc.inc
-ip dhcp excluded-address 10.1.1.1
 !
-ip dhcp pool pnp_device_pool
- network 10.1.1.0 255.255.255.0
- default-router 10.1.1.1 
- option 67 ascii http://192.0.2.1:8000/sample_python_2.py
+ip dhcp pool LAN
 !
 !
 !
@@ -75,12 +57,6 @@ subscriber templating
 ! 
 ! 
 !
-!
-ipv6 unicast-routing
-ipv6 dhcp pool ztp
- address prefix 2001:DB8::1/64
- domain-name cisco.com
- bootfile-url tftp://[2001:db8::46]/sample_day0_script.py
 !
 multilink bundle-name authenticated
 !
@@ -166,7 +142,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9VJKRUEFG4V
+license udi pid CSR1000V sn 9JV9QQSHNMN
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -208,80 +184,51 @@ redundancy
 interface Loopback1
  no ip address
 !
-interface Loopback10
+interface Loopback30
  no ip address
 !
-interface Loopback55
- ip address 10.55.55.55 255.255.255.0
+interface Loopback100
+ description NM100's loopback
+ ip address 10.100.100.100 255.255.255.0
 !
-interface Loopback501
- description Configured by Ansible
- ip address 101.101.101.105 255.255.255.255
+interface Loopback101
+ description NM101's loopback
+ ip address 10.101.101.101 255.255.255.0
 !
-interface Loopback502
- description Configured by Ansible
- ip address 102.102.102.102 255.255.255.255
- shutdown
-!
-interface VirtualPortGroup0
- vrf forwarding GS
- ip address 192.168.35.1 255.255.255.0
- ip nat inside
- no mop enabled
- no mop sysid
+interface Loopback5514
+ no ip address
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
- ip address 10.10.20.48 255.255.0.0
- ip nat outside
+ ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet2
- description Network Interface
+ description CBT Nuggets wuz here
  no ip address
  negotiation auto
- ipv6 address 2002:DB8::1/64
- ipv6 address autoconfig default
- ipv6 enable
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet3
  description Network Interface
  no ip address
+ shutdown
  negotiation auto
- ipv6 address 2001:DB8::/64 eui-64
- ipv6 enable
  no mop enabled
  no mop sysid
 !
-iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
 ip http secure-server
-ip nat inside source static tcp 192.168.35.2 7023 10.0.12.19 7023 extendable
-ip nat inside source list GS_NAT_ACL interface GigabitEthernet1 vrf GS overload
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
-ip route 0.0.0.0 0.0.0.0 10.0.0.1
-ip route 10.0.0.0 255.0.0.0 10.0.0.1
-ip route vrf GS 0.0.0.0 0.0.0.0 GigabitEthernet1 10.1.0.1 global
 !
 ip ssh rsa keypair-name ssh-key
 ip ssh version 2
 ip scp server enable
-!
-!
-ip access-list standard GS_NAT_ACL
- permit 192.168.35.0 0.0.0.255
-ip access-list standard NAT_ACL
- permit 192.168.0.0 0.0.255.255
-!
-ip access-list extended test_replace_acl
- permit tcp 1.1.1.0 0.0.0.255 2.2.2.0 0.0.0.255 eq 22
- permit tcp 3.3.3.0 0.0.0.255 4.4.4.0 0.0.0.255 eq 22
 !
 !
 !
@@ -309,6 +256,7 @@ line con 0
  exec-timeout 0 0
  stopbits 1
 line vty 0 4
+ login local
  transport input ssh
 !
 !
@@ -316,10 +264,4 @@ line vty 0 4
 !
 !
 !
-!
-app-hosting appid guestshell
- app-vnic gateway1 virtualportgroup 0 guest-interface 0
-  guest-ipaddress 192.168.35.102 netmask 255.255.255.0
- app-default-gateway 192.168.35.101 guest-interface 0
- name-server0 8.8.8.8
 end
