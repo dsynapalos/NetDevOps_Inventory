@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7135 bytes
+Current configuration : 7413 bytes
 !
-! Last configuration change at 13:05:22 UTC Thu Jun 25 2020 by developer
+! Last configuration change at 13:10:19 UTC Fri Jun 26 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -38,8 +38,14 @@ call-home
 !
 !
 ip domain name abc.inc
+ip dhcp excluded-address 10.10.10.1
 !
 ip dhcp pool LAN
+!
+ip dhcp pool LAN1
+ network 10.10.10.0 255.255.255.0
+ default-router 10.10.10.1 
+ lease 7
 !
 !
 !
@@ -147,6 +153,9 @@ license boot level ax
 diagnostic bootup level minimal
 !
 spanning-tree extend system-id
+archive
+ path flash:myconfig
+ write-memory
 memory free low-watermark processor 80557
 !
 netconf-yang
@@ -185,11 +194,11 @@ interface Loopback1
  no ip address
 !
 interface Loopback30
+ description TEST
  no ip address
 !
-interface Loopback100
- description NM100's loopback
- ip address 10.100.100.100 255.255.255.0
+interface Loopback33
+ ip address 1.1.1.1 255.255.255.0
 !
 interface Loopback101
  description NM101's loopback
@@ -197,6 +206,11 @@ interface Loopback101
 !
 interface Loopback5514
  no ip address
+!
+interface VirtualPortGroup0
+ ip address 192.168.1.1 255.255.255.0
+ no mop enabled
+ no mop sysid
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -206,20 +220,14 @@ interface GigabitEthernet1
  no mop sysid
 !
 interface GigabitEthernet2
- description CBT Nuggets wuz here
  no ip address
  negotiation auto
- no mop enabled
- no mop sysid
 !
 interface GigabitEthernet3
- description Network Interface
  no ip address
- shutdown
  negotiation auto
- no mop enabled
- no mop sysid
 !
+iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
@@ -264,4 +272,9 @@ line vty 0 4
 !
 !
 !
+!
+app-hosting appid guestshell
+ app-vnic gateway0 virtualportgroup 0 guest-interface 0
+  guest-ipaddress 192.168.1.2 netmask 255.255.255.0
+ name-server0 8.8.8.8
 end
