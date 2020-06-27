@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7413 bytes
+Current configuration : 7232 bytes
 !
-! Last configuration change at 13:10:19 UTC Fri Jun 26 2020 by developer
+! Last configuration change at 13:10:26 UTC Sat Jun 27 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -38,14 +38,6 @@ call-home
 !
 !
 ip domain name abc.inc
-ip dhcp excluded-address 10.10.10.1
-!
-ip dhcp pool LAN
-!
-ip dhcp pool LAN1
- network 10.10.10.0 255.255.255.0
- default-router 10.10.10.1 
- lease 7
 !
 !
 !
@@ -148,14 +140,11 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9JV9QQSHNMN
+license udi pid CSR1000V sn 94JPKRQPVGY
 license boot level ax
 diagnostic bootup level minimal
 !
 spanning-tree extend system-id
-archive
- path flash:myconfig
- write-memory
 memory free low-watermark processor 80557
 !
 netconf-yang
@@ -165,6 +154,7 @@ restconf
 username developer privilege 15 secret 9 $9$fhUXi6Xg438iAE$..VhXRCHiDQy3K2zmZUl9iZLbQJ9wpUtQZwQxSRESc2
 username cisco privilege 15 secret 9 $9$COf3Q4xfzT.JxE$L3hvSkDv874Qrh8Hzdv/rPQjLNOjreYG2ocffHG7rls
 username root privilege 15 secret 9 $9$FfUDIPBFcs03AE$MyLIWEuiRle8p3yGflAGTcrJA6BUUh/oWtyyfoMQXSI
+username admin1 password 0 Admin1 
 !
 redundancy
 !
@@ -193,41 +183,37 @@ redundancy
 interface Loopback1
  no ip address
 !
-interface Loopback30
- description TEST
+interface Loopback24
+ description tem que ter uma desc senao script falha
+ ip address 1.1.1.1 255.255.255.255
+ ipv6 address autoconfig
+!
+interface Loopback123
  no ip address
-!
-interface Loopback33
- ip address 1.1.1.1 255.255.255.0
-!
-interface Loopback101
- description NM101's loopback
- ip address 10.101.101.101 255.255.255.0
-!
-interface Loopback5514
- no ip address
-!
-interface VirtualPortGroup0
- ip address 192.168.1.1 255.255.255.0
- no mop enabled
- no mop sysid
 !
 interface GigabitEthernet1
- description MANAGEMENT INTERFACE - DON'T TOUCH ME
+ description - MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet2
+ description Network Interface
  no ip address
+ shutdown
  negotiation auto
+ no mop enabled
+ no mop sysid
 !
 interface GigabitEthernet3
- no ip address
+ description Network Interface
+ ip address 1.2.3.4 255.255.255.0
+ shutdown
  negotiation auto
+ no mop enabled
+ no mop sysid
 !
-iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
@@ -239,6 +225,9 @@ ip ssh version 2
 ip scp server enable
 !
 !
+ip access-list extended test
+ permit tcp 10.0.0.0 0.0.0.255 172.16.1.0 0.0.0.255 eq www ack
+ deny   ip any any
 !
 !
 !
@@ -250,6 +239,9 @@ control-plane
 !
 !
 !
+banner login ^C
+1st Ansible Play
+^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
@@ -272,9 +264,4 @@ line vty 0 4
 !
 !
 !
-!
-app-hosting appid guestshell
- app-vnic gateway0 virtualportgroup 0 guest-interface 0
-  guest-ipaddress 192.168.1.2 netmask 255.255.255.0
- name-server0 8.8.8.8
 end
