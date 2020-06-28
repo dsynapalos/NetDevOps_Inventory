@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7232 bytes
+Current configuration : 7446 bytes
 !
-! Last configuration change at 13:10:26 UTC Sat Jun 27 2020 by developer
+! Last configuration change at 13:10:36 UTC Sun Jun 28 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -56,6 +56,7 @@ subscriber templating
 ! 
 !
 !
+ipv6 unicast-routing
 multilink bundle-name authenticated
 !
 !
@@ -145,6 +146,8 @@ license boot level ax
 diagnostic bootup level minimal
 !
 spanning-tree extend system-id
+archive
+ path bootflash:
 memory free low-watermark processor 80557
 !
 netconf-yang
@@ -181,12 +184,16 @@ redundancy
 !
 !
 interface Loopback1
+ description descr key is absent when int descr is not set.
  no ip address
 !
-interface Loopback24
- description tem que ter uma desc senao script falha
- ip address 1.1.1.1 255.255.255.255
- ipv6 address autoconfig
+interface Loopback5
+ description Jose
+ ip address 5.5.5.1 255.255.255.0
+!
+interface Loopback95
+ description WilsonAntony
+ no ip address
 !
 interface Loopback123
  no ip address
@@ -200,17 +207,22 @@ interface GigabitEthernet1
 !
 interface GigabitEthernet2
  description Network Interface
- no ip address
+ ip address 192.168.3.1 255.255.255.0
+ negotiation auto
+ ipv6 address autoconfig
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet3
+ ip address 1.2.3.4 255.255.255.0
  shutdown
  negotiation auto
  no mop enabled
  no mop sysid
 !
-interface GigabitEthernet3
- description Network Interface
- ip address 1.2.3.4 255.255.255.0
- shutdown
- negotiation auto
+interface BDI6969
+ description netpalm
+ no ip address
  no mop enabled
  no mop sysid
 !
@@ -240,7 +252,8 @@ control-plane
 !
 !
 banner login ^C
-1st Ansible Play
+Nicolas Cage is the
+Tiger King
 ^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
