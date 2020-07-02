@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7419 bytes
+Current configuration : 8374 bytes
 !
-! Last configuration change at 13:10:28 UTC Wed Jul 1 2020 by developer
+! Last configuration change at 13:10:15 UTC Thu Jul 2 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -188,22 +188,39 @@ redundancy
 interface Loopback0
  ip address 192.168.3.3 255.255.255.255
 !
+interface Loopback99
+ description Added by JB
+ ip address 172.16.100.1 255.255.255.0
+!
 interface Loopback200
  description TESTING RESTCONF
  no ip address
 !
 interface Loopback500
  no ip address
+ ipv6 address 2020::1/64
+!
+interface Loopback2020
+ description 666
+ no ip address
+!
+interface Loopback8001
+ description 8001
+ no ip address
+!
+interface Loopback8002
+ description 8002
+ no ip address
 !
 interface GigabitEthernet1
- description MANAGEMENT INTERFACE - DON'T TOUCH ME
+ description MANAGEMENT INTERFACE - DON'T TOUCH ME  PLEASE
  ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet2
- description Configured by JNETCONF
+ description Configured by RESTCONF
  ip address 10.123.1.3 255.255.255.0
  negotiation auto
  no mop enabled
@@ -227,6 +244,16 @@ router eigrp 3
  network 1.1.1.1 0.0.0.0
  passive-interface Loopback200
 !
+!
+router eigrp 2
+ network 1.1.1.1 0.0.0.0
+ passive-interface Loopback200
+!
+!
+router eigrp 4
+ network 1.1.1.1 0.0.0.0
+ passive-interface Loopback200
+!
 router ospf 100
  router-id 1.1.1.2
  network 10.1.1.0 0.0.0.3 area 0
@@ -243,8 +270,21 @@ ip ssh version 2
 ip scp server enable
 !
 !
+ip access-list extended 101
+ permit ip host 192.0.2.1 any log
+ permit ip host 192.0.2.2 any log
+ permit ip host 192.0.2.3 any log
+ permit ip host 192.0.2.4 any log
+ permit ip host 192.0.2.5 any log
 !
 !
+snmp-server group mytech v3 priv 
+snmp-server view LABTEST iso included
+snmp-server view LABTEST atEntry included
+snmp-server view LABTEST ipAddrEntry included
+snmp-server view LABTEST ipNetToMediaEntry included
+snmp-server view LABTEST ipAddressEntry included
+snmp-server host 172.16.10.20 version 3 priv mytech 
 !
 !
 !
