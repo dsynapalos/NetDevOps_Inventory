@@ -9,6 +9,11 @@ Connect to Cisco Sandbox and push new config:
     - if: $CI_COMMIT_MESSAGE =~ /Ansible Managed Backup .*/
       when: never
     - when: always
+    - changes:
+      - .gitlab-ci.yml
+      when: never
+    - when: on_success
+
   script:
     - echo "this is not a backup"
 
