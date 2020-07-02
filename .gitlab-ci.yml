@@ -10,7 +10,7 @@ Connect to Cisco Sandbox and push new config:
       when: never
     - changes:
       - .gitlab-ci.yml
-      - push_config.yml
+      - push_configs.yml
       - ansible_managed_inventory
       when: never
     - when: always
