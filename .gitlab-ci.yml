@@ -18,5 +18,5 @@ Connect to Cisco Sandbox and push new config:
     - echo $CI_COMMIT_SHA
     - git diff-tree --no-commit-id --name-only -r $CI_COMMIT_SHA
     - files=(git diff-tree --no-commit-id --name-only -r $CI_COMMIT_SHA)
-    - echo $files
+    - echo $(files)
 
