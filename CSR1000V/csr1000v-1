@@ -306,7 +306,7 @@ control-plane
 !
 !
 banner login ^CLet's Shape The World For a Better Place^C
-banner motd ^CHello friends^C
+banner motd ^CHello friends^CHello2U2^C
 banner prompt-timeout ^CSorry Try agian, Wrong username/Password^C
 !
 line con 0
