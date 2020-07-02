@@ -5,8 +5,10 @@ stages:
 
 Connect to Cisco Sandbox and push new config:
   stage: push_config
-  only:
-    variables:
-      - $CI_COMMIT_MESSAGE =~ /Ansible Managed Backup .*/
+  rules:
+    - if: $CI_COMMIT_MESSAGE =~ /Ansible Managed Backup .*/
+      when: never
+    - when: always
   script:
     - echo "this is not a backup"
+    - if: '$CUSTOM_VARIABLE == "false"'
