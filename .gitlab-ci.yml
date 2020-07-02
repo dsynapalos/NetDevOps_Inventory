@@ -11,8 +11,8 @@ Connect to Cisco Sandbox and push new config:
     - when: always
     - changes:
       - .gitlab-ci.yml
-      when: never
-    - when: always
+      when: always
+    - when: never
 
   script:
     - echo "this is not a backup"
