@@ -1,7 +1,6 @@
-image: ansible
+image: ansible:latest
 
 stages:
-  - test_config
   - push_config
 
 Connect to Cisco Sandbox and push new config:
