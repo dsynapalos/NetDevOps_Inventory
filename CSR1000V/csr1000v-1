@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 8374 bytes
+Current configuration : 8469 bytes
 !
-! Last configuration change at 13:10:15 UTC Thu Jul 2 2020 by developer
+! Last configuration change at 17:25:02 UTC Thu Jul 2 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -188,6 +188,9 @@ redundancy
 interface Loopback0
  ip address 192.168.3.3 255.255.255.255
 !
+interface Loopback34
+ no ip address
+!
 interface Loopback99
  description Added by JB
  ip address 172.16.100.1 255.255.255.0
@@ -254,6 +257,11 @@ router eigrp 4
  network 1.1.1.1 0.0.0.0
  passive-interface Loopback200
 !
+!
+router eigrp 5
+ network 1.1.1.1 0.0.0.0
+ passive-interface Loopback200
+!
 router ospf 100
  router-id 1.1.1.2
  network 10.1.1.0 0.0.0.3 area 0
@@ -294,15 +302,9 @@ control-plane
 !
 !
 !
-banner motd ^C
-Welcome to the DevNet Sandbox for CSR1000v and IOS XE
-
-The following programmability features are already enabled:
-  - NETCONF
-  - RESTCONF
-
-Thanks for stopping by.
-^C
+banner login ^CLet's Shape The World For a Better Place^C
+banner motd ^CHello World, Welcome to Cisco^C
+banner prompt-timeout ^CSorry Try agian, Wrong username/Password^C
 !
 line con 0
  exec-timeout 0 0
