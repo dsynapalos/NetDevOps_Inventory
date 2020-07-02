@@ -1,0 +1,4 @@
+[all_hosts]
+CSR1000V
+[CSR1000V]
+csr1000v-1 ansible_host=ios-xe-mgmt-latest.cisco.com ansible_ssh_port=8181
