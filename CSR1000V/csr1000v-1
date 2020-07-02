@@ -37,7 +37,6 @@ ip vrf RESTCONF
 ip vrf restconf
 !
 !
-!
 ip domain name abc.inc
 !
 !
