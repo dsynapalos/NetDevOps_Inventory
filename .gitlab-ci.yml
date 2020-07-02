@@ -11,6 +11,9 @@ Connect to Cisco Sandbox and push new config:
     - changes:
       - .gitlab-ci.yml
       when: never
+    - changes:
+      - push_config.yml
+      when: never
     - when: always
 
   script:
