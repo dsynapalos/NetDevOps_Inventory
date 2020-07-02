@@ -16,7 +16,9 @@ Connect to Cisco Sandbox and push new config:
 
   script:
     - echo $CI_COMMIT_SHA
-    - git diff-tree --no-commit-id --name-only -r $CI_COMMIT_SHA
-    - files=(git diff-tree --no-commit-id --name-only -r $CI_COMMIT_SHA)
-    - echo $files
+    - git diff-tree --no-commit-id --name-only -r $CI_COMMIT_SHA > changes
+    - CHANGES=(cat changes)
+    - CHANGED_HOST=$(basename $CHANGES)
+    #- ansible-playbook gather_configs.yml -i inventory -e "CHANGES=${CHANGES} CHANGED_HOST=${CHANGED_HOST} CSR1000V_HOST=${CSR1000V_HOST} CSR1000V_USER=${CSR1000V_USER} CSR1000V_PASS=${CSR1000V_PASS} CSR1000V_SSH=${CSR1000V_SSH}" -vvv
+
 
