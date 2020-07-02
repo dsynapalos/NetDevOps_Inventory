@@ -1,0 +1,13 @@
+image: ansible
+
+stages:
+  - test_config
+  - push_config
+
+Connect to Cisco Sandbox and push new config:
+  stage: get_config
+  only:
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /Ansible Managed Backup .*/
+  script:
+    - echo "this is not a backup"
