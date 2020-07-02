@@ -1,4 +1,4 @@
-image: ansible:latest
+image: registry.gitlab.com/$DOCKER_USERNAME/$DOCKER_REPOSITORY
 
 stages:
   - push_config
