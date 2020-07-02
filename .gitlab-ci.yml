@@ -11,9 +11,10 @@ Connect to Cisco Sandbox and push new config:
     - when: always
     - changes:
       - .gitlab-ci.yml
-      when: always
-    - when: never
+      when: never
+    - when: always
 
   script:
-    - echo "this is not a backup"
+    - files=(git diff-tree --no-commit-id --name-only -r $CI_COMMIT_SHA)
+    - echo $files
 
