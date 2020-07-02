@@ -17,7 +17,6 @@ hostname csr1000v-1
 boot-start-marker
 boot-end-marker
 !
-!
 no logging console
 enable secret 9 $9$PvdeTeuxxh0ygk$PSg0GTG2I7bluI51e.IvfEu2uxy56e/9/PgqzFUklso
 !
