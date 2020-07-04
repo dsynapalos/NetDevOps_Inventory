@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 8600 bytes
+Current configuration : 9272 bytes
 !
-! Last configuration change at 13:10:03 UTC Fri Jul 3 2020 by developer
+! Last configuration change at 13:10:02 UTC Sat Jul 4 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -161,6 +161,9 @@ username developer privilege 15 secret 9 $9$fhUXi6Xg438iAE$..VhXRCHiDQy3K2zmZUl9
 username cisco privilege 15 secret 9 $9$COf3Q4xfzT.JxE$L3hvSkDv874Qrh8Hzdv/rPQjLNOjreYG2ocffHG7rls
 username root privilege 15 secret 9 $9$FfUDIPBFcs03AE$MyLIWEuiRle8p3yGflAGTcrJA6BUUh/oWtyyfoMQXSI
 username newuser50 password 0 Yu76_87AF
+username ansible-admin privilege 15 password 0 Cisco12345
+username ansible-1 privilege 15 secret 9 $9$RcSKYGWaI9Jo0.$igZ0nyXfRBORGjVWPnJFx1paVAUcAgkNCyV62L3wSKI
+username PEDROC secret 9 $9$0oYdH.YjW4Ikqk$iCN/cFmJioZLtVdIFZb/twhm6xB.CAg6qNPmXPUy2t6
 !
 redundancy
 !
@@ -189,12 +192,23 @@ redundancy
 interface Loopback0
  ip address 192.168.3.3 255.255.255.255
 !
+interface Loopback1
+ description Created with Ansible
+ no ip address
+!
+interface Loopback21
+ no ip address
+!
 interface Loopback34
  no ip address
 !
 interface Loopback99
  description Added by JB
  ip address 172.16.100.1 255.255.255.0
+!
+interface Loopback100
+ description NEWLY UPDATED DESCRIPTION
+ ip address 172.16.111.1 255.255.255.0
 !
 interface Loopback200
  description TESTING RESTCONF
@@ -279,6 +293,17 @@ ip ssh version 2
 ip scp server enable
 !
 !
+ip access-list standard ANSIBLE-TEST
+ remark TEST
+ permit 1.1.1.1
+ remark TEST2
+ permit 2.2.2.2
+ remark TEST3
+ permit 3.3.3.3
+ permit 4.4.4.4
+ permit 5.5.5.5
+ permit 6.6.6.6
+!
 ip access-list extended 101
  permit ip host 192.0.2.1 any log
  permit ip host 192.0.2.2 any log
@@ -307,9 +332,12 @@ control-plane
 !
 !
 banner login ^C
-LIVERPOOL EPL CHAMPIONS 19/20
+this is the test one
+Tiger King
 ^C
-banner motd ^CHello friends^C
+banner motd ^C
+Hello this banner is from the FILE-READ method
+^C
 banner prompt-timeout ^CSorry Try agian, Wrong username/Password^C
 !
 line con 0
