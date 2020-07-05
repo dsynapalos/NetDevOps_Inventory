@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 9272 bytes
+Current configuration : 7275 bytes
 !
-! Last configuration change at 13:10:02 UTC Sat Jul 4 2020 by developer
+! Last configuration change at 13:10:31 UTC Sun Jul 5 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -30,11 +30,6 @@ call-home
   active
   destination transport-method http
   no destination transport-method email
-!
-ip vrf RESTCONF
- description TESING RSTCONF
-!
-ip vrf restconf
 !
 !
 !
@@ -146,7 +141,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9UXAY7JK8EB
+license udi pid CSR1000V sn 981MU6TRYSM
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -160,10 +155,6 @@ restconf
 username developer privilege 15 secret 9 $9$fhUXi6Xg438iAE$..VhXRCHiDQy3K2zmZUl9iZLbQJ9wpUtQZwQxSRESc2
 username cisco privilege 15 secret 9 $9$COf3Q4xfzT.JxE$L3hvSkDv874Qrh8Hzdv/rPQjLNOjreYG2ocffHG7rls
 username root privilege 15 secret 9 $9$FfUDIPBFcs03AE$MyLIWEuiRle8p3yGflAGTcrJA6BUUh/oWtyyfoMQXSI
-username newuser50 password 0 Yu76_87AF
-username ansible-admin privilege 15 password 0 Cisco12345
-username ansible-1 privilege 15 secret 9 $9$RcSKYGWaI9Jo0.$igZ0nyXfRBORGjVWPnJFx1paVAUcAgkNCyV62L3wSKI
-username PEDROC secret 9 $9$0oYdH.YjW4Ikqk$iCN/cFmJioZLtVdIFZb/twhm6xB.CAg6qNPmXPUy2t6
 !
 redundancy
 !
@@ -189,99 +180,51 @@ redundancy
 ! 
 !
 !
-interface Loopback0
- ip address 192.168.3.3 255.255.255.255
-!
 interface Loopback1
  description Created with Ansible
  no ip address
 !
-interface Loopback21
+interface Loopback4
+ description Created with Ansible
  no ip address
-!
-interface Loopback34
- no ip address
-!
-interface Loopback99
- description Added by JB
- ip address 172.16.100.1 255.255.255.0
 !
 interface Loopback100
- description NEWLY UPDATED DESCRIPTION
- ip address 172.16.111.1 255.255.255.0
+ description TEST LOOPBACK
+ ip address 100.1.1.1 255.255.255.0
 !
-interface Loopback200
- description TESTING RESTCONF
- no ip address
+interface Loopback101
+ description TEST LOOPBACK
+ ip address 101.1.1.1 255.255.255.0
 !
-interface Loopback500
+interface Loopback111
  no ip address
- ipv6 address 2020::1/64
 !
 interface Loopback2020
- description 666
- no ip address
-!
-interface Loopback8001
- description 8001
- no ip address
-!
-interface Loopback8002
- description 8002
+ description from dev
  no ip address
 !
 interface GigabitEthernet1
- description MANAGEMENT INTERFACE - DON'T TOUCH ME  PLEASE
+ description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet2
- description Configured by RESTCONF_tes
- ip address 10.255.255.5 255.255.255.0
+ description Umair changes it
+ ip address 192.168.3.1 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet3
- description Network Interface
- ip address 10.3.3.3 255.255.255.0
+ description rollback change
+ no ip address
+ shutdown
  negotiation auto
  no mop enabled
  no mop sysid
 !
-!
-router eigrp 100
- network 0.0.0.0
- passive-interface default
- no passive-interface GigabitEthernet2
-!
-!
-router eigrp 3
- network 1.1.1.1 0.0.0.0
- passive-interface Loopback200
-!
-!
-router eigrp 2
- network 1.1.1.1 0.0.0.0
- passive-interface Loopback200
-!
-!
-router eigrp 4
- network 1.1.1.1 0.0.0.0
- passive-interface Loopback200
-!
-!
-router eigrp 5
- network 1.1.1.1 0.0.0.0
- passive-interface Loopback200
-!
-router ospf 100
- router-id 1.1.1.2
- network 10.1.1.0 0.0.0.3 area 0
-!
-iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
@@ -293,35 +236,8 @@ ip ssh version 2
 ip scp server enable
 !
 !
-ip access-list standard ANSIBLE-TEST
- remark TEST
- permit 1.1.1.1
- remark TEST2
- permit 2.2.2.2
- remark TEST3
- permit 3.3.3.3
- permit 4.4.4.4
- permit 5.5.5.5
- permit 6.6.6.6
-!
-ip access-list extended 101
- permit ip host 192.0.2.1 any log
- permit ip host 192.0.2.2 any log
- permit ip host 192.0.2.3 any log
- permit ip host 192.0.2.4 any log
- permit ip host 192.0.2.5 any log
 !
 !
-snmp-server group mytech v3 priv 
-snmp-server view LABTEST iso included
-snmp-server view LABTEST atEntry included
-snmp-server view LABTEST ipAddrEntry included
-snmp-server view LABTEST ipNetToMediaEntry included
-snmp-server view LABTEST ipAddressEntry included
-snmp-server community ansible-public RO
-snmp-server community ansible-private RW
-snmp-server community ansible-test RO
-snmp-server host 172.16.10.20 version 3 priv mytech 
 !
 !
 !
@@ -331,14 +247,15 @@ control-plane
 !
 !
 !
-banner login ^C
-this is the test one
-Tiger King
-^C
 banner motd ^C
-Hello this banner is from the FILE-READ method
+Welcome to the DevNet Sandbox for CSR1000v and IOS XE
+
+The following programmability features are already enabled:
+  - NETCONF
+  - RESTCONF
+
+Thanks for stopping by.
 ^C
-banner prompt-timeout ^CSorry Try agian, Wrong username/Password^C
 !
 line con 0
  exec-timeout 0 0
@@ -347,8 +264,6 @@ line vty 0 4
  login local
  transport input ssh
 !
-ntp server 132.163.97.3
-ntp server 132.163.97.4
 !
 !
 !
