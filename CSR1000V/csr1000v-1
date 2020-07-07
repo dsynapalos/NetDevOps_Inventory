@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7739 bytes
+Current configuration : 7236 bytes
 !
-! Last configuration change at 13:10:19 UTC Mon Jul 6 2020 by developer
+! Last configuration change at 13:10:43 UTC Tue Jul 7 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -18,8 +18,17 @@ boot-start-marker
 boot-end-marker
 !
 !
+vrf definition 98
+ description 98 VRF
+ rd 1:98
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
 no logging console
-logging monitor alerts
 enable secret 9 $9$PvdeTeuxxh0ygk$PSg0GTG2I7bluI51e.IvfEu2uxy56e/9/PgqzFUklso
 !
 no aaa new-model
@@ -38,14 +47,7 @@ call-home
 !
 !
 !
-ip name-server 8.8.8.8 8.8.4.4
 ip domain name abc.inc
-!
-ip dhcp pool GLOBOMANTICS_VLAN20
- network 198.51.100.0 255.255.255.0
- default-router 198.51.100.254 
- dns-server 8.8.4.4 8.8.8.8 
- domain-name globomantics.com
 !
 !
 !
@@ -148,7 +150,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 981MU6TRYSM
+license udi pid CSR1000V sn 9ZPRBVDBMGP
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -162,7 +164,6 @@ restconf
 username developer privilege 15 secret 9 $9$fhUXi6Xg438iAE$..VhXRCHiDQy3K2zmZUl9iZLbQJ9wpUtQZwQxSRESc2
 username cisco privilege 15 secret 9 $9$COf3Q4xfzT.JxE$L3hvSkDv874Qrh8Hzdv/rPQjLNOjreYG2ocffHG7rls
 username root privilege 15 secret 9 $9$FfUDIPBFcs03AE$MyLIWEuiRle8p3yGflAGTcrJA6BUUh/oWtyyfoMQXSI
-username ansible-user1 privilege 15 secret 9 $9$YkI.1hYQTiqf2.$ylCTqG6RIml8PEs9IdE6gm.0EP9PthdPI7eVfuWGvSo
 !
 redundancy
 !
@@ -188,33 +189,11 @@ redundancy
 ! 
 !
 !
-interface Loopback1
- description Created with Ansible
- no ip address
-!
-interface Loopback4
- description Created with Ansible
- no ip address
-!
 interface Loopback21
  no ip address
- shutdown
 !
 interface Loopback100
- description TEST LOOPBACK
- ip address 100.1.1.1 255.255.255.0
-!
-interface Loopback101
- description TEST LOOPBACK
- ip address 101.1.1.1 255.255.255.0
-!
-interface Loopback111
- description interface creation lab with ansible
- ip address 1.1.1.1 255.255.255.255
-!
-interface Loopback2020
- description from dev
- no ip address
+ ip address 5.5.5.5 255.255.255.255
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -224,20 +203,26 @@ interface GigabitEthernet1
  no mop sysid
 !
 interface GigabitEthernet2
- description Configured By NETCONF
- ip address 10.255.255.1 255.255.255.0 secondary
- ip address 192.168.3.1 255.255.255.0
- negotiation auto
- no mop enabled
- no mop sysid
-!
-interface GigabitEthernet3
- description rollback change
+ description Network Interface
  no ip address
  shutdown
  negotiation auto
  no mop enabled
  no mop sysid
+!
+interface GigabitEthernet3
+ description OSPF Configuration
+ ip address 100.168.1.3 255.255.255.0
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+router ospf 1
+ router-id 1.1.1.1
+ network 10.10.20.0 0.0.0.255 area 0
+ network 100.168.1.0 0.0.0.255 area 0
+!
+router ospf 2
 !
 ip forward-protocol nd
 ip http server
@@ -261,6 +246,9 @@ control-plane
 !
 !
 !
+banner login ^C
+This is a welcome Banner
+^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
