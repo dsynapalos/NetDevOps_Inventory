@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7236 bytes
+Current configuration : 7098 bytes
 !
-! Last configuration change at 13:10:43 UTC Tue Jul 7 2020 by developer
+! Last configuration change at 13:11:28 UTC Wed Jul 8 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -18,16 +18,7 @@ boot-start-marker
 boot-end-marker
 !
 !
-vrf definition 98
- description 98 VRF
- rd 1:98
- !
- address-family ipv4
- exit-address-family
- !
- address-family ipv6
- exit-address-family
-!
+logging buffered 4096
 no logging console
 enable secret 9 $9$PvdeTeuxxh0ygk$PSg0GTG2I7bluI51e.IvfEu2uxy56e/9/PgqzFUklso
 !
@@ -150,7 +141,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9ZPRBVDBMGP
+license udi pid CSR1000V sn 9AFU653YO66
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -189,11 +180,8 @@ redundancy
 ! 
 !
 !
-interface Loopback21
- no ip address
-!
-interface Loopback100
- ip address 5.5.5.5 255.255.255.255
+interface Loopback200
+ ip address 6.6.6.8 255.255.255.255
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -211,18 +199,12 @@ interface GigabitEthernet2
  no mop sysid
 !
 interface GigabitEthernet3
- description OSPF Configuration
- ip address 100.168.1.3 255.255.255.0
+ description Network Interface
+ no ip address
+ shutdown
  negotiation auto
  no mop enabled
  no mop sysid
-!
-router ospf 1
- router-id 1.1.1.1
- network 10.10.20.0 0.0.0.255 area 0
- network 100.168.1.0 0.0.0.255 area 0
-!
-router ospf 2
 !
 ip forward-protocol nd
 ip http server
@@ -235,6 +217,12 @@ ip ssh version 2
 ip scp server enable
 !
 !
+ip access-list extended test
+ permit ip host 192.0.2.1 any log
+ permit ip host 192.0.2.2 any log
+ permit ip host 192.0.2.3 any log
+ permit ip host 192.0.2.4 any log
+ permit ip host 192.0.2.5 any log
 !
 !
 !
@@ -246,9 +234,6 @@ control-plane
 !
 !
 !
-banner login ^C
-This is a welcome Banner
-^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
