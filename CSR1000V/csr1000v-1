@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7098 bytes
+Current configuration : 8111 bytes
 !
-! Last configuration change at 13:11:28 UTC Wed Jul 8 2020 by developer
+! Last configuration change at 13:10:27 UTC Thu Jul 9 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -18,8 +18,8 @@ boot-start-marker
 boot-end-marker
 !
 !
-logging buffered 4096
 no logging console
+logging monitor warnings
 enable secret 9 $9$PvdeTeuxxh0ygk$PSg0GTG2I7bluI51e.IvfEu2uxy56e/9/PgqzFUklso
 !
 no aaa new-model
@@ -39,6 +39,12 @@ call-home
 !
 !
 ip domain name abc.inc
+!
+ip dhcp pool GLOBOMANTICS_VLAN20
+ network 198.51.100.0 255.255.255.0
+ default-router 198.51.100.254 
+ dns-server 8.8.4.4 8.8.8.8 
+ domain-name globomantics.com
 !
 !
 !
@@ -141,7 +147,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9AFU653YO66
+license udi pid CSR1000V sn 9BCSKPY9X66
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -180,8 +186,27 @@ redundancy
 ! 
 !
 !
-interface Loopback200
- ip address 6.6.6.8 255.255.255.255
+interface Loopback22
+ no ip address
+!
+interface Loopback50
+ description Pod number 50
+ ip address 10.111.50.1 255.255.255.255
+!
+interface Loopback2020
+ no ip address
+!
+interface Loopback2021
+ no ip address
+!
+interface Loopback11111
+ description Add from RESTCONF
+ ip address 192.0.2.60 255.255.255.255
+!
+interface VirtualPortGroup0
+ ip address 192.168.1.1 255.255.255.0
+ no mop enabled
+ no mop sysid
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -192,11 +217,15 @@ interface GigabitEthernet1
 !
 interface GigabitEthernet2
  description Network Interface
- no ip address
- shutdown
+ ip address 192.168.15.100 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
+!
+interface GigabitEthernet2.100
+ description NET_MASTER
+ encapsulation dot1Q 100
+ ip address 192.168.100.1 255.255.255.128
 !
 interface GigabitEthernet3
  description Network Interface
@@ -206,6 +235,7 @@ interface GigabitEthernet3
  no mop enabled
  no mop sysid
 !
+iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
@@ -217,14 +247,16 @@ ip ssh version 2
 ip scp server enable
 !
 !
-ip access-list extended test
- permit ip host 192.0.2.1 any log
- permit ip host 192.0.2.2 any log
- permit ip host 192.0.2.3 any log
- permit ip host 192.0.2.4 any log
- permit ip host 192.0.2.5 any log
+logging host 1.1.1.1
 !
 !
+snmp-server group ansible-tech v3 priv 
+snmp-server view ANISBLE-LAB iso included
+snmp-server view ANISBLE-LAB atEntry included
+snmp-server view ANISBLE-LAB ipAddrEntry included
+snmp-server view ANISBLE-LAB ipNetToMediaEntry included
+snmp-server view ANISBLE-LAB ipAddressEntry included
+snmp-server host 172.1.1.1 version 3 priv ansible-tech 
 !
 !
 !
@@ -234,6 +266,9 @@ control-plane
 !
 !
 !
+banner login ^C
+Built with Ansible
+^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
@@ -256,4 +291,9 @@ line vty 0 4
 !
 !
 !
+!
+app-hosting appid guestshell
+ app-vnic gateway0 virtualportgroup 0 guest-interface 0
+  guest-ipaddress 192.168.1.2 netmask 255.255.255.0
+ name-server0 8.8.8.8
 end
