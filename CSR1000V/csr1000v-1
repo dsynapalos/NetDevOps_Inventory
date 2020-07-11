@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 8111 bytes
+Current configuration : 7746 bytes
 !
-! Last configuration change at 13:10:27 UTC Thu Jul 9 2020 by developer
+! Last configuration change at 13:10:46 UTC Sat Jul 11 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -18,8 +18,43 @@ boot-start-marker
 boot-end-marker
 !
 !
+vrf definition CHEMICAL
+ description CHEMICAL ENGINEERING FIRM
+ rd 65000:2
+ route-target export 65000:2
+ route-target import 65000:2
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+vrf definition CHEM_MGMT
+ description CHEMICAL ENGINEERING MANAGER
+ rd 65000:3
+ route-target export 65000:3
+ route-target import 65000:4
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+vrf definition POLICE
+ description POLICE DEPARTMENT
+ rd 65000:1
+ route-target export 65000:1
+ route-target import 65000:1
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
 no logging console
-logging monitor warnings
 enable secret 9 $9$PvdeTeuxxh0ygk$PSg0GTG2I7bluI51e.IvfEu2uxy56e/9/PgqzFUklso
 !
 no aaa new-model
@@ -32,6 +67,12 @@ call-home
   destination transport-method http
   no destination transport-method email
 !
+ip vrf GREEN
+ rd 200:1
+!
+ip vrf RED
+ rd 100:1
+!
 !
 !
 !
@@ -39,12 +80,6 @@ call-home
 !
 !
 ip domain name abc.inc
-!
-ip dhcp pool GLOBOMANTICS_VLAN20
- network 198.51.100.0 255.255.255.0
- default-router 198.51.100.254 
- dns-server 8.8.4.4 8.8.8.8 
- domain-name globomantics.com
 !
 !
 !
@@ -147,10 +182,11 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9BCSKPY9X66
+license udi pid CSR1000V sn 9A4MVKPYPMG
 license boot level ax
 diagnostic bootup level minimal
 !
+spanning-tree mode mst
 spanning-tree extend system-id
 memory free low-watermark processor 80557
 !
@@ -186,28 +222,6 @@ redundancy
 ! 
 !
 !
-interface Loopback22
- no ip address
-!
-interface Loopback50
- description Pod number 50
- ip address 10.111.50.1 255.255.255.255
-!
-interface Loopback2020
- no ip address
-!
-interface Loopback2021
- no ip address
-!
-interface Loopback11111
- description Add from RESTCONF
- ip address 192.0.2.60 255.255.255.255
-!
-interface VirtualPortGroup0
- ip address 192.168.1.1 255.255.255.0
- no mop enabled
- no mop sysid
-!
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
@@ -217,25 +231,24 @@ interface GigabitEthernet1
 !
 interface GigabitEthernet2
  description Network Interface
- ip address 192.168.15.100 255.255.255.0
+ ip address 172.1.1.1 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
-!
-interface GigabitEthernet2.100
- description NET_MASTER
- encapsulation dot1Q 100
- ip address 192.168.100.1 255.255.255.128
 !
 interface GigabitEthernet3
  description Network Interface
- no ip address
- shutdown
+ ip address 192.1.1.4 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
 !
-iox
+interface BDI4001
+ description netpalm
+ no ip address
+ no mop enabled
+ no mop sysid
+!
 ip forward-protocol nd
 ip http server
 ip http authentication local
@@ -247,16 +260,11 @@ ip ssh version 2
 ip scp server enable
 !
 !
-logging host 1.1.1.1
+ip access-list extended foo
+ permit ip any host 192.168.20.1
+ deny   ip any any
 !
 !
-snmp-server group ansible-tech v3 priv 
-snmp-server view ANISBLE-LAB iso included
-snmp-server view ANISBLE-LAB atEntry included
-snmp-server view ANISBLE-LAB ipAddrEntry included
-snmp-server view ANISBLE-LAB ipNetToMediaEntry included
-snmp-server view ANISBLE-LAB ipAddressEntry included
-snmp-server host 172.1.1.1 version 3 priv ansible-tech 
 !
 !
 !
@@ -266,9 +274,6 @@ control-plane
 !
 !
 !
-banner login ^C
-Built with Ansible
-^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
@@ -291,9 +296,4 @@ line vty 0 4
 !
 !
 !
-!
-app-hosting appid guestshell
- app-vnic gateway0 virtualportgroup 0 guest-interface 0
-  guest-ipaddress 192.168.1.2 netmask 255.255.255.0
- name-server0 8.8.8.8
 end
