@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7746 bytes
+Current configuration : 8169 bytes
 !
-! Last configuration change at 13:10:46 UTC Sat Jul 11 2020 by developer
+! Last configuration change at 10:05:22 UTC Sun Jul 12 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -80,6 +80,12 @@ ip vrf RED
 !
 !
 ip domain name abc.inc
+!
+ip dhcp pool GLOBOMANTICS_VLAN20
+ network 198.51.100.0 255.255.255.0
+ default-router 198.51.100.254 
+ dns-server 8.8.4.4 8.8.8.8 
+ domain-name globomantics.com
 !
 !
 !
@@ -244,10 +250,16 @@ interface GigabitEthernet3
  no mop sysid
 !
 interface BDI4001
- description netpalm
+ description netpalm - namechange
  no ip address
  no mop enabled
  no mop sysid
+!
+router ospf 1
+ network 5.5.5.5 0.0.0.0 area 0
+ network 9.9.9.9 0.0.0.0 area 0
+ network 15.5.5.5 0.0.0.0 area 0
+ network 25.5.5.5 0.0.0.0 area 0
 !
 ip forward-protocol nd
 ip http server
@@ -260,9 +272,12 @@ ip ssh version 2
 ip scp server enable
 !
 !
-ip access-list extended foo
- permit ip any host 192.168.20.1
- deny   ip any any
+ip access-list extended test
+ permit ip any host 10.25.15.4
+ip access-list extended test2
+ permit ip any host 10.25.25.5
+ip access-list extended test3
+ permit ip any host 10.25.25.6
 !
 !
 !
