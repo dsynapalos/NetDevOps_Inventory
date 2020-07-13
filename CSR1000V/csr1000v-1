@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 8169 bytes
+Current configuration : 6771 bytes
 !
-! Last configuration change at 13:10:19 UTC Sun Jul 12 2020 by developer
+! Last configuration change at 13:10:49 UTC Mon Jul 13 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -18,43 +18,8 @@ boot-start-marker
 boot-end-marker
 !
 !
-vrf definition CHEMICAL
- description CHEMICAL ENGINEERING FIRM
- rd 65000:2
- route-target export 65000:2
- route-target import 65000:2
- !
- address-family ipv4
- exit-address-family
- !
- address-family ipv6
- exit-address-family
-!
-vrf definition CHEM_MGMT
- description CHEMICAL ENGINEERING MANAGER
- rd 65000:3
- route-target export 65000:3
- route-target import 65000:4
- !
- address-family ipv4
- exit-address-family
- !
- address-family ipv6
- exit-address-family
-!
-vrf definition POLICE
- description POLICE DEPARTMENT
- rd 65000:1
- route-target export 65000:1
- route-target import 65000:1
- !
- address-family ipv4
- exit-address-family
- !
- address-family ipv6
- exit-address-family
-!
 no logging console
+logging monitor alerts
 enable secret 9 $9$PvdeTeuxxh0ygk$PSg0GTG2I7bluI51e.IvfEu2uxy56e/9/PgqzFUklso
 !
 no aaa new-model
@@ -67,12 +32,6 @@ call-home
   destination transport-method http
   no destination transport-method email
 !
-ip vrf GREEN
- rd 200:1
-!
-ip vrf RED
- rd 100:1
-!
 !
 !
 !
@@ -80,12 +39,6 @@ ip vrf RED
 !
 !
 ip domain name abc.inc
-!
-ip dhcp pool GLOBOMANTICS_VLAN20
- network 198.51.100.0 255.255.255.0
- default-router 198.51.100.254 
- dns-server 8.8.4.4 8.8.8.8 
- domain-name globomantics.com
 !
 !
 !
@@ -188,11 +141,10 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9A4MVKPYPMG
+license udi pid CSR1000V sn 9EJKYIR2AL5
 license boot level ax
 diagnostic bootup level minimal
 !
-spanning-tree mode mst
 spanning-tree extend system-id
 memory free low-watermark processor 80557
 !
@@ -228,6 +180,9 @@ redundancy
 ! 
 !
 !
+interface Loopback150
+ ip address 150.1.1.1 255.255.255.0
+!
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
@@ -237,29 +192,18 @@ interface GigabitEthernet1
 !
 interface GigabitEthernet2
  description Network Interface
- ip address 172.1.1.1 255.255.255.0
+ no ip address
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet3
  description Network Interface
- ip address 192.1.1.4 255.255.255.0
+ ip address 10.10.10.1 255.255.255.0
+ shutdown
  negotiation auto
  no mop enabled
  no mop sysid
-!
-interface BDI4001
- description netpalm - namechange
- no ip address
- no mop enabled
- no mop sysid
-!
-router ospf 1
- network 5.5.5.5 0.0.0.0 area 0
- network 9.9.9.9 0.0.0.0 area 0
- network 15.5.5.5 0.0.0.0 area 0
- network 25.5.5.5 0.0.0.0 area 0
 !
 ip forward-protocol nd
 ip http server
@@ -272,12 +216,6 @@ ip ssh version 2
 ip scp server enable
 !
 !
-ip access-list extended test
- permit ip any host 10.25.15.4
-ip access-list extended test2
- permit ip any host 10.25.25.5
-ip access-list extended test3
- permit ip any host 10.25.25.6
 !
 !
 !
@@ -289,15 +227,7 @@ control-plane
 !
 !
 !
-banner motd ^C
-Welcome to the DevNet Sandbox for CSR1000v and IOS XE
-
-The following programmability features are already enabled:
-  - NETCONF
-  - RESTCONF
-
-Thanks for stopping by.
-^C
+banner motd ^CCisco was here^C
 !
 line con 0
  exec-timeout 0 0
@@ -306,6 +236,7 @@ line vty 0 4
  login local
  transport input ssh
 !
+netconf ssh
 !
 !
 !
