@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 6771 bytes
+Current configuration : 7073 bytes
 !
-! Last configuration change at 13:10:49 UTC Mon Jul 13 2020 by developer
+! Last configuration change at 13:11:27 UTC Tue Jul 14 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -19,7 +19,6 @@ boot-end-marker
 !
 !
 no logging console
-logging monitor alerts
 enable secret 9 $9$PvdeTeuxxh0ygk$PSg0GTG2I7bluI51e.IvfEu2uxy56e/9/PgqzFUklso
 !
 no aaa new-model
@@ -141,7 +140,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9EJKYIR2AL5
+license udi pid CSR1000V sn 9QXHS541PPN
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -163,6 +162,7 @@ redundancy
 !
 !
 !
+cdp run
 ! 
 !
 !
@@ -180,8 +180,8 @@ redundancy
 ! 
 !
 !
-interface Loopback150
- ip address 150.1.1.1 255.255.255.0
+interface Loopback121
+ ip address 72.16.121.1 255.255.255.240
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -192,18 +192,20 @@ interface GigabitEthernet1
 !
 interface GigabitEthernet2
  description Network Interface
- no ip address
+ ip address 50.50.50.50 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet3
  description Network Interface
- ip address 10.10.10.1 255.255.255.0
+ no ip address
  shutdown
  negotiation auto
  no mop enabled
  no mop sysid
+!
+router ospf 1
 !
 ip forward-protocol nd
 ip http server
@@ -216,6 +218,22 @@ ip ssh version 2
 ip scp server enable
 !
 !
+ip access-list standard ANSIBLE-TEST
+ remark TEST
+ permit 1.1.1.1
+ remark TEST2
+ permit 2.2.2.2
+ remark TEST3
+ permit 3.3.3.3
+ permit 4.4.4.4
+ permit 5.5.5.5
+ permit 6.6.6.6
+ permit 7.7.7.7
+ remark TEST
+ remark TEST2
+ remark TEST3
+ permit 45.45.45.45
+!
 !
 !
 !
@@ -227,7 +245,12 @@ control-plane
 !
 !
 !
-banner motd ^CCisco was here^C
+banner login ^C
+Jason Wong was here
+^C
+banner motd ^C
+Here is the Message of the day
+^C
 !
 line con 0
  exec-timeout 0 0
@@ -236,7 +259,6 @@ line vty 0 4
  login local
  transport input ssh
 !
-netconf ssh
 !
 !
 !
