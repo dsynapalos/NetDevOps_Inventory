@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7073 bytes
+Current configuration : 7111 bytes
 !
-! Last configuration change at 13:11:27 UTC Tue Jul 14 2020 by developer
+! Last configuration change at 13:10:35 UTC Wed Jul 15 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -38,6 +38,12 @@ call-home
 !
 !
 ip domain name abc.inc
+!
+ip dhcp pool GLOBOMANTICS_VLAN20
+ network 198.51.100.0 255.255.255.0
+ default-router 198.51.100.254 
+ dns-server 8.8.4.4 8.8.8.8 
+ domain-name globomantics.com
 !
 !
 !
@@ -140,7 +146,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9QXHS541PPN
+license udi pid CSR1000V sn 9RM75ND391H
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -162,7 +168,6 @@ redundancy
 !
 !
 !
-cdp run
 ! 
 !
 !
@@ -180,11 +185,16 @@ cdp run
 ! 
 !
 !
-interface Loopback121
- ip address 72.16.121.1 255.255.255.240
+interface Loopback6
+ description 666
+ ip address 6.6.6.6 255.255.255.0
+!
+interface Loopback10
+ description huangqiaom
+ ip address 10.10.10.48 255.255.255.0
 !
 interface GigabitEthernet1
- description MANAGEMENT INTERFACE - DON'T TOUCH ME
+ description huangqiaom
  ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
@@ -192,7 +202,8 @@ interface GigabitEthernet1
 !
 interface GigabitEthernet2
  description Network Interface
- ip address 50.50.50.50 255.255.255.0
+ no ip address
+ shutdown
  negotiation auto
  no mop enabled
  no mop sysid
@@ -205,8 +216,6 @@ interface GigabitEthernet3
  no mop enabled
  no mop sysid
 !
-router ospf 1
-!
 ip forward-protocol nd
 ip http server
 ip http authentication local
@@ -217,22 +226,6 @@ ip ssh rsa keypair-name ssh-key
 ip ssh version 2
 ip scp server enable
 !
-!
-ip access-list standard ANSIBLE-TEST
- remark TEST
- permit 1.1.1.1
- remark TEST2
- permit 2.2.2.2
- remark TEST3
- permit 3.3.3.3
- permit 4.4.4.4
- permit 5.5.5.5
- permit 6.6.6.6
- permit 7.7.7.7
- remark TEST
- remark TEST2
- remark TEST3
- permit 45.45.45.45
 !
 !
 !
@@ -245,11 +238,14 @@ control-plane
 !
 !
 !
-banner login ^C
-Jason Wong was here
-^C
 banner motd ^C
-Here is the Message of the day
+Welcome to the DevNet Sandbox for CSR1000v and IOS XE
+
+The following programmability features are already enabled:
+  - NETCONF
+  - RESTCONF
+
+Thanks for stopping by.
 ^C
 !
 line con 0
