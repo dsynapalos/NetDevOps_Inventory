@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7111 bytes
+Current configuration : 7050 bytes
 !
-! Last configuration change at 13:10:35 UTC Wed Jul 15 2020 by developer
+! Last configuration change at 13:10:51 UTC Thu Jul 16 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -38,12 +38,6 @@ call-home
 !
 !
 ip domain name abc.inc
-!
-ip dhcp pool GLOBOMANTICS_VLAN20
- network 198.51.100.0 255.255.255.0
- default-router 198.51.100.254 
- dns-server 8.8.4.4 8.8.8.8 
- domain-name globomantics.com
 !
 !
 !
@@ -146,7 +140,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9RM75ND391H
+license udi pid CSR1000V sn 9663QV5OVJM
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -185,16 +179,8 @@ redundancy
 ! 
 !
 !
-interface Loopback6
- description 666
- ip address 6.6.6.6 255.255.255.0
-!
-interface Loopback10
- description huangqiaom
- ip address 10.10.10.48 255.255.255.0
-!
 interface GigabitEthernet1
- description huangqiaom
+ description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
@@ -215,6 +201,16 @@ interface GigabitEthernet3
  negotiation auto
  no mop enabled
  no mop sysid
+!
+router ospf 2
+ router-id 192.168.1.10
+ network 172.16.19.0 0.0.0.255 area 0
+ network 172.16.20.0 0.0.0.255 area 9
+!
+router ospf 1
+ router-id 192.168.1.40
+ network 172.16.19.0 0.0.0.255 area 0
+ network 172.16.20.0 0.0.0.255 area 9
 !
 ip forward-protocol nd
 ip http server
