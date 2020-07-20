@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7050 bytes
+Current configuration : 6786 bytes
 !
-! Last configuration change at 13:10:51 UTC Thu Jul 16 2020 by developer
+! Last configuration change at 13:10:44 UTC Mon Jul 20 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -140,7 +140,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9663QV5OVJM
+license udi pid CSR1000V sn 9T1BE8O879R
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -180,7 +180,7 @@ redundancy
 !
 !
 interface GigabitEthernet1
- description MANAGEMENT INTERFACE - DON'T TOUCH ME
+ description aaaaa
  ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
@@ -201,16 +201,6 @@ interface GigabitEthernet3
  negotiation auto
  no mop enabled
  no mop sysid
-!
-router ospf 2
- router-id 192.168.1.10
- network 172.16.19.0 0.0.0.255 area 0
- network 172.16.20.0 0.0.0.255 area 9
-!
-router ospf 1
- router-id 192.168.1.40
- network 172.16.19.0 0.0.0.255 area 0
- network 172.16.20.0 0.0.0.255 area 9
 !
 ip forward-protocol nd
 ip http server
