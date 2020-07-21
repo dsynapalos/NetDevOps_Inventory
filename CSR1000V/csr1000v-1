@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 6786 bytes
+Current configuration : 6985 bytes
 !
-! Last configuration change at 13:10:44 UTC Mon Jul 20 2020 by developer
+! Last configuration change at 13:11:31 UTC Tue Jul 21 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -140,7 +140,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9T1BE8O879R
+license udi pid CSR1000V sn 9OQ561S1E4E
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -154,6 +154,7 @@ restconf
 username developer privilege 15 secret 9 $9$fhUXi6Xg438iAE$..VhXRCHiDQy3K2zmZUl9iZLbQJ9wpUtQZwQxSRESc2
 username cisco privilege 15 secret 9 $9$COf3Q4xfzT.JxE$L3hvSkDv874Qrh8Hzdv/rPQjLNOjreYG2ocffHG7rls
 username root privilege 15 secret 9 $9$FfUDIPBFcs03AE$MyLIWEuiRle8p3yGflAGTcrJA6BUUh/oWtyyfoMQXSI
+username newuser98 password 0 Yu76_87AF
 !
 redundancy
 !
@@ -162,6 +163,9 @@ redundancy
 !
 !
 !
+!
+class-map match-all cisco
+ match access-group name cisco
 ! 
 !
 !
@@ -180,7 +184,7 @@ redundancy
 !
 !
 interface GigabitEthernet1
- description aaaaa
+ description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
@@ -213,6 +217,8 @@ ip ssh version 2
 ip scp server enable
 !
 !
+ip access-list extended cisco
+ permit ip any 192.168.56.0 0.0.0.255
 !
 !
 !
