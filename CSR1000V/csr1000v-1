@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 6959 bytes
+Current configuration : 7010 bytes
 !
-! Last configuration change at 13:10:40 UTC Wed Jul 22 2020 by developer
+! Last configuration change at 13:06:59 UTC Thu Jul 23 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -38,6 +38,12 @@ call-home
 !
 !
 ip domain name abc.inc
+ip dhcp excluded-address 192.168.56.50 192.168.56.100
+!
+ip dhcp pool cisco1
+ network 192.168.56.0 255.255.255.0
+ default-router 192.168.56.1 
+ lease 6
 !
 !
 !
@@ -140,7 +146,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9ZGEVM6HYJT
+license udi pid CSR1000V sn 9WE1CG45VBE
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -179,9 +185,8 @@ redundancy
 ! 
 !
 !
-interface Loopback200
- description test from a guest
- ip address 192.168.200.1 255.255.255.255
+interface Loopback6
+ no ip address
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -191,10 +196,8 @@ interface GigabitEthernet1
  no mop sysid
 !
 interface GigabitEthernet2
- ip address 10.10.10.1 255.255.255.0
+ no ip address
  negotiation auto
- no mop enabled
- no mop sysid
 !
 interface GigabitEthernet3
  description Network Interface
@@ -245,6 +248,7 @@ line vty 0 4
  login local
  transport input ssh
 !
+netconf ssh
 !
 !
 !
