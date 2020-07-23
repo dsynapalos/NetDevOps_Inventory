@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7010 bytes
+Current configuration : 7293 bytes
 !
-! Last configuration change at 13:06:59 UTC Thu Jul 23 2020 by developer
+! Last configuration change at 14:00:24 UTC Thu Jul 23 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -37,6 +37,7 @@ call-home
 !
 !
 !
+no ip domain lookup
 ip domain name abc.inc
 ip dhcp excluded-address 192.168.56.50 192.168.56.100
 !
@@ -168,6 +169,15 @@ redundancy
 !
 !
 !
+!
+class-map match-all cisco
+ match access-group name cisco1
+!
+policy-map cisco2
+ class cisco
+  set precedence 5
+  bandwidth 500000
+!
 ! 
 !
 !
@@ -194,6 +204,7 @@ interface GigabitEthernet1
  negotiation auto
  no mop enabled
  no mop sysid
+ service-policy output cisco2
 !
 interface GigabitEthernet2
  no ip address
@@ -218,6 +229,8 @@ ip ssh version 2
 ip scp server enable
 !
 !
+ip access-list extended cisco1
+ permit ip 192.168.56.0 0.0.0.255 192.168.23.0 0.0.0.255
 ip access-list extended james
  permit ip any host 192.168.20.1
 !
@@ -248,6 +261,7 @@ line vty 0 4
  login local
  transport input ssh
 !
+ntp logging
 netconf ssh
 !
 !
