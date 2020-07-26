@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7353 bytes
+Current configuration : 6996 bytes
 !
-! Last configuration change at 14:35:29 UTC Thu Jul 23 2020 by developer
+! Last configuration change at 13:05:27 UTC Sun Jul 26 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -37,15 +37,7 @@ call-home
 !
 !
 !
-ip name-server 172.20.1.250
-no ip domain lookup
-ip domain name devnet.cisco.com
-ip dhcp excluded-address 192.168.56.50 192.168.56.100
-!
-ip dhcp pool cisco1
- network 192.168.56.0 255.255.255.0
- default-router 192.168.56.1 
- lease 6
+ip domain name abc.inc
 !
 !
 !
@@ -148,7 +140,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9WE1CG45VBE
+license udi pid CSR1000V sn 9TMDTYR5EM1
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -170,15 +162,6 @@ redundancy
 !
 !
 !
-!
-class-map match-all cisco
- match access-group name cisco1
-!
-policy-map cisco2
- class cisco
-  set precedence 5
-  bandwidth 500000
-!
 ! 
 !
 !
@@ -195,21 +178,22 @@ policy-map cisco2
 ! 
 ! 
 !
-!
-interface Loopback6
- no ip address
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
+ ip access-group 101 in
  negotiation auto
  no mop enabled
  no mop sysid
- service-policy output cisco2
 !
 interface GigabitEthernet2
+ description Network Interface
  no ip address
+ shutdown
  negotiation auto
+ no mop enabled
+ no mop sysid
 !
 interface GigabitEthernet3
  description Network Interface
@@ -230,10 +214,11 @@ ip ssh version 2
 ip scp server enable
 !
 !
-ip access-list extended cisco1
- permit ip 192.168.56.0 0.0.0.255 192.168.23.0 0.0.0.255
-ip access-list extended james
- permit ip any host 192.168.20.1
+ip access-list extended cisco
+ permit 101 192.168.20.0 0.0.0.255 any
+ip access-list extended 101
+ permit ip any any
+ deny   ip 192.168.10.0 0.0.0.255 any
 !
 !
 !
@@ -262,9 +247,6 @@ line vty 0 4
  login local
  transport input ssh
 !
-ntp logging
-ntp server 172.20.1.17
-netconf ssh
 !
 !
 !
