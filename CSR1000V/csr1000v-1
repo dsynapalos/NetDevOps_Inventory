@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 6996 bytes
+Current configuration : 7136 bytes
 !
-! Last configuration change at 13:05:27 UTC Sun Jul 26 2020 by developer
+! Last configuration change at 13:10:38 UTC Tue Jul 28 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -140,7 +140,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9TMDTYR5EM1
+license udi pid CSR1000V sn 9WF6CRHPDTQ
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -179,6 +179,9 @@ redundancy
 ! 
 !
 !
+interface Loopback21
+ no ip address
+!
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
@@ -188,9 +191,8 @@ interface GigabitEthernet1
  no mop sysid
 !
 interface GigabitEthernet2
- description Network Interface
- no ip address
- shutdown
+ description daniyal
+ ip address 192.16.1.1 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
@@ -208,17 +210,18 @@ ip http server
 ip http authentication local
 ip http secure-server
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
+ip route 192.0.2.0 255.255.255.0 GigabitEthernet1
 !
 ip ssh rsa keypair-name ssh-key
 ip ssh version 2
 ip scp server enable
 !
 !
-ip access-list extended cisco
- permit 101 192.168.20.0 0.0.0.255 any
 ip access-list extended 101
+ deny   ip 10.0.0.0 0.255.255.255 any
+ deny   ip 172.16.0.0 0.0.255.255 any
  permit ip any any
- deny   ip 192.168.10.0 0.0.0.255 any
+ deny   ip 192.168.0.0 0.0.255.255 any
 !
 !
 !
@@ -230,6 +233,10 @@ control-plane
 !
 !
 !
+banner login ^C
+tui khoai mon 
+nay a nha
+^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
