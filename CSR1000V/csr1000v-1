@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 8305 bytes
+Current configuration : 8054 bytes
 !
-! Last configuration change at 13:10:34 UTC Fri Jul 31 2020
+! Last configuration change at 13:10:33 UTC Sat Aug 1 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -20,7 +20,6 @@ boot-end-marker
 !
 no logging console
 enable secret 9 $9$PvdeTeuxxh0ygk$PSg0GTG2I7bluI51e.IvfEu2uxy56e/9/PgqzFUklso
-enable password qazasd
 !
 no aaa new-model
 call-home
@@ -38,7 +37,7 @@ call-home
 !
 !
 !
-ip domain name abc.inc
+ip domain name bbbb.com
 !
 !
 !
@@ -58,11 +57,9 @@ subscriber templating
 !
 !
 !
-flow record test-record
+flow record NTA-Record-Solarwinds
  match ipv4 source address
  match ipv4 destination address
- match ipv4 protocol
- match ipv4 tos
  match transport source-port
  match transport destination-port
  collect routing source as
@@ -73,21 +70,28 @@ flow record test-record
  collect counter packets
  collect timestamp sys-uptime first
  collect timestamp sys-uptime last
- collect flow sampler
 !
 !
-flow exporter test-exporter
- description test-exporter
- destination 10.0.0.10
- source Loopback21
+flow exporter NTA-Exporter-Solarwinds-1
+ description SOLARWINDS FLOW EXPORTER
+ destination 10.201.144.98
+ source Loopback6
  transport udp 2055
 !
 !
-flow monitor test-monitor
- exporter test-exporter
- record test-record
+flow exporter NTA-Exporter-Solarwinds-2
+ description SOLARWINDS FLOW EXPORTER
+ destination 10.101.128.16
+ source Loopback6
+ transport udp 2055
 !
-sampler sampler-test
+!
+flow monitor NTA-Monitor-Solarwinds
+ exporter NTA-Exporter-Solarwinds-1
+ exporter NTA-Exporter-Solarwinds-2
+ record NTA-Record-Solarwinds
+!
+sampler Sampler-Solarwinds
  mode random 1 out-of 1024
 !
 multilink bundle-name authenticated
@@ -96,7 +100,6 @@ multilink bundle-name authenticated
 !
 !
 !
-password encryption aes
 !
 !
 !
@@ -175,7 +178,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 96EU5IBISLT
+license udi pid CSR1000V sn 961NHD4OV4X
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -189,7 +192,6 @@ restconf
 username developer privilege 15 secret 9 $9$fhUXi6Xg438iAE$..VhXRCHiDQy3K2zmZUl9iZLbQJ9wpUtQZwQxSRESc2
 username cisco privilege 15 secret 9 $9$COf3Q4xfzT.JxE$L3hvSkDv874Qrh8Hzdv/rPQjLNOjreYG2ocffHG7rls
 username root privilege 15 secret 9 $9$FfUDIPBFcs03AE$MyLIWEuiRle8p3yGflAGTcrJA6BUUh/oWtyyfoMQXSI
-username pepe password 6 e[`\VIdCVJX`AU[AB`VaFZL_SL\AAB
 !
 redundancy
 !
@@ -198,7 +200,6 @@ redundancy
 !
 !
 !
-cdp run
 ! 
 !
 !
@@ -215,55 +216,48 @@ cdp run
 ! 
 ! 
 !
+!
+interface Loopback6
+ description TESTEPEPE
+ ip address 10.10.10.10 255.255.255.252
 !
 interface Loopback21
  no ip address
 !
-interface Loopback55
- ip address 10.55.55.55 255.255.255.0
-!
-interface Loopback100
- description Added by CBT Yogesh
- ip address 1.1.1.2 255.255.255.255
+interface Loopback172
+ description #do not delete please#
+ ip address 172.25.11.1 255.255.255.255
 !
 interface GigabitEthernet1
- description MANAGEMENT INTERFACE - DON'T TOUCH ME
+ description ME
  ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet2
- description daniyal
+ description Network Interface
+ ip flow monitor NTA-Monitor-Solarwinds input
  no ip address
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet3
- description test-netflow
  no ip address
- shutdown
  negotiation auto
+!
+interface BDI4001
+ description netpalm
+ no ip address
  no mop enabled
  no mop sysid
 !
 !
-router eigrp 35
+router eigrp 120
  network 0.0.0.0
  eigrp router-id 3.3.3.6
 !
-!
-router eigrp 78
- network 0.0.0.0
- eigrp router-id 3.3.3.6
-!
-router ospf 1
- network 0.0.0.0 255.255.255.255 area 0
- default-information originate
- distance 50
-!
-iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
@@ -278,7 +272,6 @@ ip scp server enable
 !
 !
 !
-tacacs-server key 6 Uc_LNS][EEBVBdg`]\TRgeRJCh`AAB
 !
 !
 control-plane
@@ -287,6 +280,9 @@ control-plane
 !
 !
 !
+banner login ^C
+Hello from Ansible
+^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
@@ -308,12 +304,5 @@ line vty 0 4
 !
 !
 !
-event manager applet create_loop
- event syslog pattern "%SYS-5-CONFIG_I"
- action 0 cli command "enable"
- action 1 cli command "guestshell run python LoopCreate55.py loop55"
 !
-!
-app-hosting appid guestshell
- app-vnic management guest-interface 0
 end
