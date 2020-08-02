@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 8054 bytes
+Current configuration : 7179 bytes
 !
-! Last configuration change at 13:10:33 UTC Sat Aug 1 2020 by developer
+! Last configuration change at 13:10:46 UTC Sun Aug 2 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -37,7 +37,7 @@ call-home
 !
 !
 !
-ip domain name bbbb.com
+ip domain name abc.inc
 !
 !
 !
@@ -55,44 +55,6 @@ subscriber templating
 ! 
 ! 
 !
-!
-!
-flow record NTA-Record-Solarwinds
- match ipv4 source address
- match ipv4 destination address
- match transport source-port
- match transport destination-port
- collect routing source as
- collect routing destination as
- collect routing next-hop address ipv4
- collect transport tcp flags
- collect counter bytes
- collect counter packets
- collect timestamp sys-uptime first
- collect timestamp sys-uptime last
-!
-!
-flow exporter NTA-Exporter-Solarwinds-1
- description SOLARWINDS FLOW EXPORTER
- destination 10.201.144.98
- source Loopback6
- transport udp 2055
-!
-!
-flow exporter NTA-Exporter-Solarwinds-2
- description SOLARWINDS FLOW EXPORTER
- destination 10.101.128.16
- source Loopback6
- transport udp 2055
-!
-!
-flow monitor NTA-Monitor-Solarwinds
- exporter NTA-Exporter-Solarwinds-1
- exporter NTA-Exporter-Solarwinds-2
- record NTA-Record-Solarwinds
-!
-sampler Sampler-Solarwinds
- mode random 1 out-of 1024
 !
 multilink bundle-name authenticated
 !
@@ -178,7 +140,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 961NHD4OV4X
+license udi pid CSR1000V sn 9G74TZX0N7X
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -217,46 +179,45 @@ redundancy
 ! 
 !
 !
-interface Loopback6
- description TESTEPEPE
- ip address 10.10.10.10 255.255.255.252
-!
-interface Loopback21
+interface Loopback2
+ description configure loopback2
  no ip address
 !
-interface Loopback172
- description #do not delete please#
- ip address 172.25.11.1 255.255.255.255
+interface Loopback3
+ description interface loopback 3create via ansible
+ ip address 3.3.3.1 255.255.255.252
+!
+interface Loopback22
+ no ip address
+!
+interface Loopback33
+ no ip address
 !
 interface GigabitEthernet1
- description ME
+ description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet2
- description Network Interface
- ip flow monitor NTA-Monitor-Solarwinds input
  no ip address
  negotiation auto
  no mop enabled
  no mop sysid
+!
+interface GigabitEthernet2.2
+ description interface 2.2 created
+ encapsulation dot1Q 2
+ ip address 2.2.2.21 255.255.255.0
 !
 interface GigabitEthernet3
+ description Network Interface
  no ip address
+ shutdown
  negotiation auto
-!
-interface BDI4001
- description netpalm
- no ip address
  no mop enabled
  no mop sysid
-!
-!
-router eigrp 120
- network 0.0.0.0
- eigrp router-id 3.3.3.6
 !
 ip forward-protocol nd
 ip http server
@@ -280,9 +241,6 @@ control-plane
 !
 !
 !
-banner login ^C
-Hello from Ansible
-^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
@@ -300,6 +258,7 @@ line vty 0 4
  login local
  transport input ssh
 !
+ntp server 10.11.10.65
 !
 !
 !
