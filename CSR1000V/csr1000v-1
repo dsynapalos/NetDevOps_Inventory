@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7759 bytes
+Current configuration : 7748 bytes
 !
-! Last configuration change at 18:16:05 UTC Tue Aug 4 2020 by developer
+! Last configuration change at 18:51:12 UTC Tue Aug 4 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -261,8 +261,7 @@ control-plane
 !
 !
 banner login ^C
-WELCOME ON BOARD..
-Tiger King
+Hello from Ansible
 ^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE

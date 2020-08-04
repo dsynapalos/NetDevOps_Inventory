@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Tue Aug  4 10:55:07 2020
-!Time: Tue Aug  4 10:55:20 2020
+!Running configuration last done at: Tue Aug  4 11:29:02 2020
+!Time: Tue Aug  4 11:30:02 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao
@@ -141,7 +141,10 @@ interface Vlan105
   ip router ospf 1 area 0.0.0.0
 
 interface Vlan200
-  description TESTS_PYTHON9
+  description TESTS_REST_PYTHON
+
+interface Vlan300
+  description TESTS_PYTHON4
 
 interface port-channel11
   switchport mode trunk
