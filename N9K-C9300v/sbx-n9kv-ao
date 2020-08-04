@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Tue Aug  4 09:38:30 2020
-!Time: Tue Aug  4 09:40:36 2020
+!Running configuration last done at: Tue Aug  4 10:55:07 2020
+!Time: Tue Aug  4 10:55:20 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao
@@ -91,7 +91,7 @@ ntp source-interface mgmt0
 ntp authenticate
 ntp authentication-key 1 md5 QPTFmtc 7
 
-vlan 1-9,100-105
+vlan 1-9,100-105,200
 vlan 100
   name mgmt
 vlan 101
@@ -139,6 +139,9 @@ interface Vlan105
   description iot svi - DEMO PLEASE DON'T TOUCH
   ip address 172.16.105.1/24
   ip router ospf 1 area 0.0.0.0
+
+interface Vlan200
+  description TESTS_PYTHON9
 
 interface port-channel11
   switchport mode trunk
@@ -295,8 +298,20 @@ interface mgmt0
 interface loopback1
   ip address 172.16.0.1/32
 
+interface loopback2
+  ip address 2.2.2.2/32
+
+interface loopback3
+  ip address 3.3.3.3/32
+
+interface loopback4
+  ip address 4.4.4.4/32
+
 interface loopback30
   description My Learning Lab Loopback
+
+interface loopback50
+  description Interface added via NETCONF
 
 interface loopback98
   description Configured using OpenConfig Model
