@@ -2,3 +2,10 @@
 CSR1000V
 [CSR1000V]
 csr1000v-1 ansible_host=ios-xe-mgmt-latest.cisco.com ansible_ssh_port=8181
+ios
+iosxr
+[iosxr]
+[ios]
+nxos
+[nxos]
+sbx-n9kv-ao ansible_host=sbx-nxos-mgmt.cisco.com ansible_ssh_port=8181
