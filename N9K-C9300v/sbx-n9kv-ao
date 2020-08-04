@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Tue Aug  4 09:21:27 2020
-!Time: Tue Aug  4 09:24:06 2020
+!Running configuration last done at: Tue Aug  4 09:38:30 2020
+!Time: Tue Aug  4 09:40:36 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao
@@ -294,13 +294,6 @@ interface mgmt0
 
 interface loopback1
   ip address 172.16.0.1/32
-
-interface loopback2
-  ip address 2.2.2.2/32
-
-interface loopback24
-  description TEMPORAL
-  ip address 8.8.8.8/32
 
 interface loopback30
   description My Learning Lab Loopback
