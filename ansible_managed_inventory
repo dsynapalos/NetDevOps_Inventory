@@ -9,3 +9,5 @@ iosxr
 nxos
 [nxos]
 sbx-n9kv-ao ansible_host=sbx-nxos-mgmt.cisco.com ansible_ssh_port=8181
+iosxr-6.5.3
+N9K-C9300v
