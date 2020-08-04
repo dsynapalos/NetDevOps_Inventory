@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7089 bytes
+Current configuration : 7153 bytes
 !
-! Last configuration change at 09:39:58 UTC Tue Aug 4 2020 by developer
+! Last configuration change at 10:10:37 UTC Tue Aug 4 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -214,6 +214,11 @@ router ospf 101
  network 192.168.1.0 0.0.0.255 area 0
  network 192.168.3.0 0.0.0.255 area 0
  network 192.168.4.0 0.0.0.255 area 0
+!
+router ospf 1000
+!
+router bgp 12345
+ bgp log-neighbor-changes
 !
 ip forward-protocol nd
 ip http server
