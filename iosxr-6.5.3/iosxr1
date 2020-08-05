@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Wed Aug  5 14:51:58 2020 by admin
+!! Last configuration change at Wed Aug  5 15:02:00 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
@@ -80,11 +80,14 @@ grpc
  max-request-per-user 32
 !
 telemetry model-driven
+ destination-group dialin_1002
+ !
  sensor-group test
   sensor-path openconfig-interfaces:interfaces/interface
  !
  subscription sub3
   sensor-group-id test sample-interval 30000
+  destination-id dialin_1002
  !
 !
 xml agent tty
