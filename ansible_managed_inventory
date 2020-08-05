@@ -9,3 +9,10 @@ csr1000v-1
 iosxr1
 [N9K-C9300v]
 sbx-n9kv-aoansible_host=sbx-nxos-mgmt.cisco.com
+[CSR1000V]
+csr1000v-1
+csr1000v-1
+[iosxr-6.5.3]
+iosxr1
+[N9K-C9300v]
+sbx-n9kv-aoansible_host=sbx-nxos-mgmt.cisco.com
