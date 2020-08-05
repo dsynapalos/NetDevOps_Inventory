@@ -3,9 +3,9 @@ CSR1000V
 iosxr-6.5.3
 N9K-C9300v
 [CSR1000V]
-csr1000v-1
-csr1000v-1
+csr1000v-1ansible_host=ios-xe-mgmt-latest.cisco.com
+csr1000v-1ansible_host=ios-xe-mgmt-latest.cisco.com
 [iosxr-6.5.3]
-iosxr1
+iosxr1ansible_host=sbx-iosxr-mgmt.cisco.com
 [N9K-C9300v]
 sbx-n9kv-aoansible_host=sbx-nxos-mgmt.cisco.com
