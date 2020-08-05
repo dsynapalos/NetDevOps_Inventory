@@ -12,7 +12,7 @@ vdc sbx-n9kv-ao id 1
   limit-resource u6route-mem minimum 96 maximum 96
   limit-resource m4route-mem minimum 58 maximum 58
   limit-resource m6route-mem minimum 8 maximum 8
-
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 feature nxapi
 feature bash-shell
 feature scp-server
