@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Wed Aug  5 13:46:58 2020 by admin
+!! Last configuration change at Wed Aug  5 14:22:02 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
@@ -71,6 +71,13 @@ router static
  address-family ipv4 unicast
   0.0.0.0/0 10.10.20.254
  !
+!
+grpc
+ port 50051
+ no-tls
+ address-family dual
+ max-request-total 256
+ max-request-per-user 32
 !
 xml agent tty
  iteration off
