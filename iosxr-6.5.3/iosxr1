@@ -1,0 +1,113 @@
+Building configuration...
+!! IOS XR Configuration version = 6.5.3
+!! Last configuration change at Wed Aug  5 19:42:02 2020 by admin
+!
+hostname iosxr1
+domain name abc.inc
+username admin
+ group root-lr
+ group cisco-support
+ secret 5 $1$oN8e$ft916PCBogrqPKt59kepW0
+!
+tpa
+ vrf default
+  address-family ipv4
+   default-route mgmt
+  !
+ !
+!
+line console
+ exec-timeout 0 0
+ absolute-timeout 0
+ session-timeout 0
+!
+line default
+ exec-timeout 0 0
+ absolute-timeout 0
+ session-timeout 0
+ transport input ssh
+!
+call-home
+ service active
+ contact smart-licensing
+ profile CiscoTAC-1
+  active
+  destination transport-method http
+ !
+!
+interface Loopback100
+ description ***MERGE LOOPBACK 100****
+ ipv4 address 1.1.1.100 255.255.255.255
+!
+interface Loopback200
+ description ***MERGE LOOPBACK 200****
+ ipv4 address 1.1.1.200 255.255.255.255
+!
+interface MgmtEth0/RP0/CPU0/0
+ ipv4 address 10.10.20.175 255.255.255.0
+!
+interface GigabitEthernet0/0/0/0
+ shutdown
+!
+interface GigabitEthernet0/0/0/1
+ shutdown
+!
+interface GigabitEthernet0/0/0/2
+ shutdown
+!
+interface GigabitEthernet0/0/0/3
+ shutdown
+!
+interface GigabitEthernet0/0/0/4
+ shutdown
+!
+interface GigabitEthernet0/0/0/5
+ shutdown
+!
+interface GigabitEthernet0/0/0/6
+ shutdown
+!
+router static
+ address-family ipv4 unicast
+  0.0.0.0/0 10.10.20.254
+ !
+!
+grpc
+ port 50051
+ no-tls
+ address-family dual
+ max-request-total 256
+ max-request-per-user 32
+!
+telemetry model-driven
+ destination-group dialin_1002
+  vrf default
+  address-family ipv4 64.103.37.3 port 50051
+   encoding self-describing-gpb
+   protocol grpc no-tls
+  !
+  address-family ipv4 10.10.20.175 port 50051
+   encoding self-describing-gpb
+   protocol grpc no-tls
+  !
+ !
+ sensor-group test
+  sensor-path openconfig-interfaces:interfaces/interface
+ !
+ subscription sub3
+  sensor-group-id test sample-interval 30000
+  destination-id dialin_1002
+ !
+!
+xml agent tty
+ iteration off
+!
+netconf agent tty
+!
+netconf-yang agent
+ ssh
+!
+ssh server v2
+ssh server vrf default
+ssh server netconf vrf default
+end
