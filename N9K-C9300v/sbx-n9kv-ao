@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Tue Aug  4 11:29:02 2020
-!Time: Tue Aug  4 11:30:02 2020
+!Running configuration last done at: Tue Aug  4 23:59:25 2020
+!Time: Wed Aug  5 00:02:24 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao
@@ -24,9 +24,6 @@ feature grpc
 feature interface-vlan
 
 username admin password 5 $5$QHsjkRNS$AmVcv7uxx4xYtWYCiinb.T5Jmkzm1rQ7G0ccMjXqzIC  role network-admin
-username pedro password 5 $5$PdV1vhYV$2GoZvC0NNjkxxczQUm3vd7iSHqVE0NX3TzIPvy16251  role network-operator
-username pedro role network-admin
-username pedro passphrase  lifetime 99999 warntime 14 gracetime 3
 
 banner motd ^
 Welcome to the DevNet Always On Sandbox for Open NX-OS
@@ -55,7 +52,6 @@ snmp-server contact DevNet-Sandbox
 snmp-server location Always-On-Sandbox
 snmp-server source-interface traps mgmt0
 snmp-server user admin network-admin auth md5 0xe296d8d231ffa9be6276fd4c513b40a8 priv 0xe296d8d231ffa9be6276fd4c513b40a8 localizedkey
-snmp-server user pedro network-operator auth md5 0x1981773f28d5c515e6a6352a9a7d7ea3 priv 0x1981773f28d5c515e6a6352a9a7d7ea3 localizedkey
 rmon event 1 description FATAL(1) owner PMON@FATAL
 rmon event 2 description CRITICAL(2) owner PMON@CRITICAL
 rmon event 3 description ERROR(3) owner PMON@ERROR
@@ -91,7 +87,7 @@ ntp source-interface mgmt0
 ntp authenticate
 ntp authentication-key 1 md5 QPTFmtc 7
 
-vlan 1-9,100-105,200
+vlan 1-9,100-105
 vlan 100
   name mgmt
 vlan 101
@@ -140,12 +136,6 @@ interface Vlan105
   ip address 172.16.105.1/24
   ip router ospf 1 area 0.0.0.0
 
-interface Vlan200
-  description TESTS_REST_PYTHON
-
-interface Vlan300
-  description TESTS_PYTHON4
-
 interface port-channel11
   switchport mode trunk
   switchport trunk allowed vlan 100-110
@@ -163,7 +153,6 @@ interface Ethernet1/2
 interface Ethernet1/3
 
 interface Ethernet1/4
-  switchport access vlan 171
 
 interface Ethernet1/5
   description L3 Link
@@ -252,8 +241,6 @@ interface Ethernet1/43
 interface Ethernet1/44
 
 interface Ethernet1/45
-  switchport mode trunk
-  switchport trunk native vlan 173
 
 interface Ethernet1/46
 
@@ -301,20 +288,8 @@ interface mgmt0
 interface loopback1
   ip address 172.16.0.1/32
 
-interface loopback2
-  ip address 2.2.2.2/32
-
-interface loopback3
-  ip address 3.3.3.3/32
-
-interface loopback4
-  ip address 4.4.4.4/32
-
 interface loopback30
   description My Learning Lab Loopback
-
-interface loopback50
-  description Interface added via NETCONF
 
 interface loopback98
   description Configured using OpenConfig Model

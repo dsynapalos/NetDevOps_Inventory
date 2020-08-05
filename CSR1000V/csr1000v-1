@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7748 bytes
+Current configuration : 6874 bytes
 !
-! Last configuration change at 18:51:12 UTC Tue Aug 4 2020 by developer
+! Last configuration change at 07:25:25 UTC Wed Aug 5 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -38,12 +38,6 @@ call-home
 !
 !
 ip domain name abc.inc
-!
-ip dhcp pool GLOBOMANTICS_VLAN20
- network 198.51.100.0 255.255.255.0
- default-router 198.51.100.254 
- dns-server 8.8.4.4 8.8.8.8 
- domain-name globomantics.com
 !
 !
 !
@@ -146,9 +140,11 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9Q4LN3OK6O9
+license udi pid CSR1000V sn 9588DZ711JH
 license boot level ax
 diagnostic bootup level minimal
+
+et-analytics
 !
 spanning-tree extend system-id
 memory free low-watermark processor 80557
@@ -185,10 +181,7 @@ redundancy
 ! 
 !
 !
-interface Loopback5
- no ip address
-!
-interface Loopback21
+interface Loopback200
  no ip address
 !
 interface GigabitEthernet1
@@ -214,29 +207,6 @@ interface GigabitEthernet3
  no mop enabled
  no mop sysid
 !
-router ospf 100
-!
-router ospf 101
- network 192.168.1.0 0.0.0.255 area 0
- network 192.168.3.0 0.0.0.255 area 0
- network 192.168.4.0 0.0.0.255 area 0
-!
-router ospf 1000
- network 192.168.12.0 0.0.0.255 area 0
- network 192.168.13.0 0.0.0.255 area 0
- network 192.168.14.0 0.0.0.255 area 0
- network 192.168.20.0 0.0.0.255 area 0
- network 192.168.21.0 0.0.0.255 area 0
- network 192.168.22.0 0.0.0.255 area 0
-!
-router ospf 1100
- network 192.168.12.0 0.0.0.255 area 0
- network 192.168.13.0 0.0.0.255 area 0
- network 192.168.14.0 0.0.0.255 area 0
-!
-router bgp 12345
- bgp log-neighbor-changes
-!
 iox
 ip forward-protocol nd
 ip http server
@@ -260,9 +230,6 @@ control-plane
 !
 !
 !
-banner login ^C
-Hello from Ansible
-^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
@@ -285,7 +252,4 @@ line vty 0 4
 !
 !
 !
-!
-app-hosting appid guestshell
- app-vnic management guest-interface 0
 end
