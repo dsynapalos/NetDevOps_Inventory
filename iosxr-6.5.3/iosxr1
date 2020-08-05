@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Wed Aug  5 15:12:01 2020 by admin
+!! Last configuration change at Wed Aug  5 16:02:00 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
@@ -81,6 +81,15 @@ grpc
 !
 telemetry model-driven
  destination-group dialin_1002
+  vrf default
+  address-family ipv4 64.103.37.3 port 50051
+   encoding self-describing-gpb
+   protocol grpc no-tls
+  !
+  address-family ipv4 10.10.20.175 port 50051
+   encoding self-describing-gpb
+   protocol grpc no-tls
+  !
  !
  sensor-group test
   sensor-path openconfig-interfaces:interfaces/interface
