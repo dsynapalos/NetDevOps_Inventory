@@ -14,6 +14,13 @@ platform console virtual
 !
 hostname csr1000v-1
 !
+!
+!
+!
+!
+!
+!
+!
 boot-start-marker
 boot-end-marker
 !
