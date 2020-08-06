@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Wed Aug  5 05:53:41 2020
-!Time: Wed Aug  5 05:54:30 2020
+!Running configuration last done at: Thu Aug  6 05:39:57 2020
+!Time: Thu Aug  6 05:43:22 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao
@@ -12,7 +12,7 @@ vdc sbx-n9kv-ao id 1
   limit-resource u6route-mem minimum 96 maximum 96
   limit-resource m4route-mem minimum 58 maximum 58
   limit-resource m6route-mem minimum 8 maximum 8
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 feature nxapi
 feature bash-shell
 feature scp-server
@@ -141,6 +141,8 @@ interface port-channel11
   switchport trunk allowed vlan 100-110
 
 interface Ethernet1/1
+  description 1cisco
+  shutdown
   switchport mode trunk
   switchport trunk allowed vlan 100-110
   channel-group 11
@@ -290,6 +292,9 @@ interface loopback1
 
 interface loopback30
   description My Learning Lab Loopback
+
+interface loopback88
+  ip address 8.8.8.8/32
 
 interface loopback98
   description Configured using OpenConfig Model

@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7093 bytes
+Current configuration : 7167 bytes
 !
-! Last configuration change at 13:20:31 UTC Wed Aug 5 2020 by developer
+! Last configuration change at 13:11:48 UTC Thu Aug 6 2020 by NETCONF
 !
 version 16.11
 service timestamps debug datetime msec
@@ -13,13 +13,6 @@ no platform punt-keepalive disable-kernel-core
 platform console virtual
 !
 hostname csr1000v-1
-!
-!
-!
-!
-!
-!
-!
 !
 boot-start-marker
 boot-end-marker
@@ -194,6 +187,13 @@ redundancy
 ! 
 !
 !
+interface Loopback10
+ description Created with Ansible
+ no ip address
+!
+interface Loopback101
+ no ip address
+!
 interface Loopback200
  no ip address
 !
@@ -217,12 +217,8 @@ interface GigabitEthernet2
  no mop sysid
 !
 interface GigabitEthernet3
- description Network Interface
  no ip address
- shutdown
  negotiation auto
- no mop enabled
- no mop sysid
 !
 iox
 ip forward-protocol nd
@@ -247,8 +243,11 @@ control-plane
 !
 !
 !
+banner login ^C
+Built with Ansible
+^C
 banner motd ^C
-Welcome to the (edited) DevNet Sandbox for CSR1000v and IOS XE
+Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
 The following programmability features are already enabled:
   - NETCONF
