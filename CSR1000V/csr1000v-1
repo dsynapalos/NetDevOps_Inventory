@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7167 bytes
+Current configuration : 7711 bytes
 !
-! Last configuration change at 13:11:48 UTC Thu Aug 6 2020 by NETCONF
+! Last configuration change at 13:14:02 UTC Fri Aug 7 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -67,6 +67,9 @@ multilink bundle-name authenticated
 !
 !
 !
+!
+!
+source template DefaultWiredDot1xClosedAuth
 !
 !
 !
@@ -170,6 +173,7 @@ redundancy
 !
 !
 !
+lldp run
 ! 
 !
 !
@@ -194,6 +198,12 @@ interface Loopback10
 interface Loopback101
  no ip address
 !
+interface Loopback140
+ no ip address
+!
+interface Loopback142
+ no ip address
+!
 interface Loopback200
  no ip address
 !
@@ -201,8 +211,24 @@ interface Loopback400
  description Robs
  no ip address
 !
+interface Loopback401
+ no ip address
+!
+interface Loopback402
+ no ip address
+ shutdown
+!
+interface Loopback404
+ no ip address
+!
+interface VirtualPortGroup0
+ ip address 192.168.2.1 255.255.255.0
+ ip nat inside
+ no mop enabled
+ no mop sysid
+!
 interface GigabitEthernet1
- description MANAGEMENT INTERFACE - DON'T TOUCH ME
+ description description MANAGEMENT INTERFACE - DON'T TOUCH ME touch
  ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
@@ -215,10 +241,17 @@ interface GigabitEthernet2
  negotiation auto
  no mop enabled
  no mop sysid
+ no lldp transmit
+ no lldp receive
 !
 interface GigabitEthernet3
  no ip address
  negotiation auto
+ no lldp transmit
+ no lldp receive
+!
+router bgp 65001
+ bgp log-neighbor-changes
 !
 iox
 ip forward-protocol nd
@@ -243,9 +276,6 @@ control-plane
 !
 !
 !
-banner login ^C
-Built with Ansible
-^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
@@ -268,4 +298,7 @@ line vty 0 4
 !
 !
 !
+!
+app-hosting appid guestshell
+ app-vnic management guest-interface 0
 end
