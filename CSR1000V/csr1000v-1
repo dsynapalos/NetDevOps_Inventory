@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7711 bytes
+Current configuration : 6817 bytes
 !
-! Last configuration change at 13:14:02 UTC Fri Aug 7 2020 by developer
+! Last configuration change at 13:10:24 UTC Sat Aug 8 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -39,12 +39,6 @@ call-home
 !
 ip domain name abc.inc
 !
-ip dhcp pool GLOBOMANTICS_VLAN20
- network 198.51.100.0 255.255.255.0
- default-router 198.51.100.254 
- dns-server 8.8.4.4 8.8.8.8 
- domain-name globomantics.com
-!
 !
 !
 login on-success log
@@ -67,9 +61,6 @@ multilink bundle-name authenticated
 !
 !
 !
-!
-!
-source template DefaultWiredDot1xClosedAuth
 !
 !
 !
@@ -149,11 +140,9 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9588DZ711JH
+license udi pid CSR1000V sn 9YLENB7COH8
 license boot level ax
 diagnostic bootup level minimal
-
-et-analytics
 !
 spanning-tree extend system-id
 memory free low-watermark processor 80557
@@ -173,7 +162,6 @@ redundancy
 !
 !
 !
-lldp run
 ! 
 !
 !
@@ -190,45 +178,9 @@ lldp run
 ! 
 ! 
 !
-!
-interface Loopback10
- description Created with Ansible
- no ip address
-!
-interface Loopback101
- no ip address
-!
-interface Loopback140
- no ip address
-!
-interface Loopback142
- no ip address
-!
-interface Loopback200
- no ip address
-!
-interface Loopback400
- description Robs
- no ip address
-!
-interface Loopback401
- no ip address
-!
-interface Loopback402
- no ip address
- shutdown
-!
-interface Loopback404
- no ip address
-!
-interface VirtualPortGroup0
- ip address 192.168.2.1 255.255.255.0
- ip nat inside
- no mop enabled
- no mop sysid
 !
 interface GigabitEthernet1
- description description MANAGEMENT INTERFACE - DON'T TOUCH ME touch
+ description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
@@ -241,19 +193,15 @@ interface GigabitEthernet2
  negotiation auto
  no mop enabled
  no mop sysid
- no lldp transmit
- no lldp receive
 !
 interface GigabitEthernet3
+ description Network Interface
  no ip address
+ shutdown
  negotiation auto
- no lldp transmit
- no lldp receive
+ no mop enabled
+ no mop sysid
 !
-router bgp 65001
- bgp log-neighbor-changes
-!
-iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
@@ -298,7 +246,4 @@ line vty 0 4
 !
 !
 !
-!
-app-hosting appid guestshell
- app-vnic management guest-interface 0
 end
