@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Sun Aug  9 05:47:42 2020
-!Time: Sun Aug  9 05:47:46 2020
+!Running configuration last done at: Mon Aug 10 05:41:45 2020
+!Time: Mon Aug 10 05:44:47 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao
@@ -123,8 +123,7 @@ interface Vlan102
 
 interface Vlan103
   description test svi - DEMO PLEASE DON'T TOUCH
-  no shutdown
-  ip address 172.16.103.2/24
+  ip address 172.16.103.1/24
   ip router ospf 1 area 0.0.0.0
 
 interface Vlan104
@@ -288,6 +287,10 @@ interface mgmt0
 
 interface loopback1
   ip address 172.16.0.1/32
+
+interface loopback20
+  description "To_USPACV-SDWAN-01_G0/0/1-ServiceVPN"
+  ip address 10.160.6.2/30
 
 interface loopback30
   description My Learning Lab Loopback

@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7744 bytes
+Current configuration : 7894 bytes
 !
-! Last configuration change at 13:10:58 UTC Sun Aug 9 2020 by developer
+! Last configuration change at 13:11:06 UTC Mon Aug 10 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -140,7 +140,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9YLENB7COH8
+license udi pid CSR1000V sn 90FF1LIG8QG
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -180,11 +180,18 @@ redundancy
 ! 
 !
 !
+interface Loopback10
+ no ip address
+!
 interface Loopback16
  no ip address
 !
 interface Loopback101
  ip address 10.99.98.1 255.255.255.0
+!
+interface Loopback120
+ description test-interface
+ no ip address
 !
 interface VirtualPortGroup0
  description ** DO NOT TOUCH for IOx **
@@ -204,6 +211,7 @@ interface GigabitEthernet1
 interface GigabitEthernet2
  description prueba restconf
  ip address 10.0.0.1 255.255.255.0
+ shutdown
  negotiation auto
  no mop enabled
  no mop sysid
@@ -253,6 +261,9 @@ control-plane
 !
 !
 !
+banner login ^C
+dont access
+^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
@@ -269,7 +280,6 @@ line con 0
 line vty 0 4
  login local
  transport input ssh
-!
 !
 !
 !
