@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7894 bytes
+Current configuration : 7044 bytes
 !
-! Last configuration change at 13:11:06 UTC Mon Aug 10 2020 by developer
+! Last configuration change at 13:10:47 UTC Tue Aug 11 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -140,7 +140,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 90FF1LIG8QG
+license udi pid CSR1000V sn 94P4MQ2OQX9
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -154,7 +154,6 @@ restconf
 username developer privilege 15 secret 9 $9$fhUXi6Xg438iAE$..VhXRCHiDQy3K2zmZUl9iZLbQJ9wpUtQZwQxSRESc2
 username cisco privilege 15 secret 9 $9$COf3Q4xfzT.JxE$L3hvSkDv874Qrh8Hzdv/rPQjLNOjreYG2ocffHG7rls
 username root privilege 15 secret 9 $9$FfUDIPBFcs03AE$MyLIWEuiRle8p3yGflAGTcrJA6BUUh/oWtyyfoMQXSI
-username ahmed privilege 15 password 0 cisco
 !
 redundancy
 !
@@ -163,6 +162,7 @@ redundancy
 !
 !
 !
+cdp run
 ! 
 !
 !
@@ -179,77 +179,45 @@ redundancy
 ! 
 ! 
 !
-!
-interface Loopback10
- no ip address
-!
-interface Loopback16
- no ip address
-!
-interface Loopback101
- ip address 10.99.98.1 255.255.255.0
-!
-interface Loopback120
- description test-interface
- no ip address
-!
-interface VirtualPortGroup0
- description ** DO NOT TOUCH for IOx **
- ip address 192.168.1.1 255.255.255.0
- ip nat inside
- no mop enabled
- no mop sysid
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
- ip nat outside
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet2
- description prueba restconf
- ip address 10.0.0.1 255.255.255.0
- shutdown
+ description Configured and Merged by Ansible Network
+ no ip address
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet3
- description Network Interface
- no ip address
- shutdown
+ description Configured and Merged by Ansible Network
+ ip address 192.168.168.168 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
 !
-router ospf 1
- router-id 33.33.33.33
- network 0.0.0.0 255.255.255.255 area 0
+router bgp 65001
+ bgp log-neighbor-changes
 !
 iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
 ip http secure-server
-ip nat inside source list NAT-ACL interface GigabitEthernet1 overload
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
+ip route 10.240.65.0 255.255.255.0 GigabitEthernet1
+ip route 10.240.96.0 255.255.255.0 GigabitEthernet1
 !
 ip ssh rsa keypair-name ssh-key
 ip ssh version 2
-ip ssh pubkey-chain
-  username ahmed
-   key-hash ssh-rsa 21C7ADFC59A89C26F606F00AEAD6FD8D ahmed@ahmed-Ideapad
 ip scp server enable
 !
 !
-ip access-list extended NAT-ACL
- permit ip 192.168.1.0 0.0.0.255 any
-ip access-list extended test
- permit ip host 3.3.3.3 any
- permit ip host 1.1.1.1 any
- permit ip host 2.2.2.2 any
 !
 !
 !
@@ -261,9 +229,6 @@ control-plane
 !
 !
 !
-banner login ^C
-dont access
-^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
@@ -271,7 +236,7 @@ The following programmability features are already enabled:
   - NETCONF
   - RESTCONF
 
-Thanks for stopping by. HEllop
+Thanks for stopping by.
 ^C
 !
 line con 0
@@ -281,13 +246,10 @@ line vty 0 4
  login local
  transport input ssh
 !
+netconf ssh
 !
 !
 !
 !
 !
-app-hosting appid guestshell
- app-vnic gateway0 virtualportgroup 0 guest-interface 0
-  guest-ipaddress 192.168.1.2 netmask 255.255.255.0
- name-server0 8.8.8.8
 end
