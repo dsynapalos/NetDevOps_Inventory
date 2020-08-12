@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7044 bytes
+Current configuration : 7619 bytes
 !
-! Last configuration change at 13:10:47 UTC Tue Aug 11 2020 by developer
+! Last configuration change at 13:10:47 UTC Wed Aug 12 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -154,6 +154,7 @@ restconf
 username developer privilege 15 secret 9 $9$fhUXi6Xg438iAE$..VhXRCHiDQy3K2zmZUl9iZLbQJ9wpUtQZwQxSRESc2
 username cisco privilege 15 secret 9 $9$COf3Q4xfzT.JxE$L3hvSkDv874Qrh8Hzdv/rPQjLNOjreYG2ocffHG7rls
 username root privilege 15 secret 9 $9$FfUDIPBFcs03AE$MyLIWEuiRle8p3yGflAGTcrJA6BUUh/oWtyyfoMQXSI
+username devnet privilege 15 password 0 Admin_1234!
 !
 redundancy
 !
@@ -180,6 +181,21 @@ cdp run
 ! 
 !
 !
+interface Loopback0
+ ip address 2.2.2.2 255.255.255.255
+!
+interface Loopback10
+ no ip address
+!
+interface Loopback55
+ no ip address
+!
+interface Loopback99
+ no ip address
+!
+interface Loopback200
+ no ip address
+!
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
@@ -189,7 +205,8 @@ interface GigabitEthernet1
 !
 interface GigabitEthernet2
  description Configured and Merged by Ansible Network
- no ip address
+ ip address 10.10.10.10 255.255.255.252 secondary
+ ip address 1.1.1.1 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
@@ -218,6 +235,10 @@ ip ssh version 2
 ip scp server enable
 !
 !
+ip access-list extended 100
+ permit ip 10.10.11.0 0.0.0.255 any
+ permit ip any any
+ deny   ip any any
 !
 !
 !
@@ -229,6 +250,9 @@ control-plane
 !
 !
 !
+banner login ^C
+Welcome to Area 51
+^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
@@ -243,8 +267,14 @@ line con 0
  exec-timeout 0 0
  stopbits 1
 line vty 0 4
+ access-class 100 in
+ logging synchronous
  login local
  transport input ssh
+line vty 5 15
+ access-class 100 in
+ logging synchronous
+ login
 !
 netconf ssh
 !
