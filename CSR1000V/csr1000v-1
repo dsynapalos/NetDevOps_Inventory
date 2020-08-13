@@ -1,12 +1,13 @@
 Building configuration...
 
-Current configuration : 7619 bytes
+Current configuration : 6970 bytes
 !
-! Last configuration change at 13:10:47 UTC Wed Aug 12 2020 by developer
+! Last configuration change at 13:11:34 UTC Thu Aug 13 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
 service timestamps log datetime msec
+service password-encryption
 service call-home
 platform qfp utilization monitor load 80
 no platform punt-keepalive disable-kernel-core
@@ -140,7 +141,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 94P4MQ2OQX9
+license udi pid CSR1000V sn 9NDXTGH4YD5
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -154,7 +155,7 @@ restconf
 username developer privilege 15 secret 9 $9$fhUXi6Xg438iAE$..VhXRCHiDQy3K2zmZUl9iZLbQJ9wpUtQZwQxSRESc2
 username cisco privilege 15 secret 9 $9$COf3Q4xfzT.JxE$L3hvSkDv874Qrh8Hzdv/rPQjLNOjreYG2ocffHG7rls
 username root privilege 15 secret 9 $9$FfUDIPBFcs03AE$MyLIWEuiRle8p3yGflAGTcrJA6BUUh/oWtyyfoMQXSI
-username devnet privilege 15 password 0 Admin_1234!
+username admin privilege 15 password 7 013202095205395E731F1A48
 !
 redundancy
 !
@@ -163,7 +164,6 @@ redundancy
 !
 !
 !
-cdp run
 ! 
 !
 !
@@ -181,20 +181,8 @@ cdp run
 ! 
 !
 !
-interface Loopback0
- ip address 2.2.2.2 255.255.255.255
-!
-interface Loopback10
- no ip address
-!
-interface Loopback55
- no ip address
-!
-interface Loopback99
- no ip address
-!
-interface Loopback200
- no ip address
+interface Loopback5
+ ip address 5.5.5.5 255.255.255.255
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -204,41 +192,31 @@ interface GigabitEthernet1
  no mop sysid
 !
 interface GigabitEthernet2
- description Configured and Merged by Ansible Network
- ip address 10.10.10.10 255.255.255.252 secondary
- ip address 1.1.1.1 255.255.255.0
+ description Connection to the core router
+ no ip address
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet3
- description Configured and Merged by Ansible Network
- ip address 192.168.168.168 255.255.255.0
+ description Network Interface
+ no ip address
+ shutdown
  negotiation auto
  no mop enabled
  no mop sysid
 !
-router bgp 65001
- bgp log-neighbor-changes
-!
-iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
 ip http secure-server
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
-ip route 10.240.65.0 255.255.255.0 GigabitEthernet1
-ip route 10.240.96.0 255.255.255.0 GigabitEthernet1
 !
 ip ssh rsa keypair-name ssh-key
 ip ssh version 2
 ip scp server enable
 !
 !
-ip access-list extended 100
- permit ip 10.10.11.0 0.0.0.255 any
- permit ip any any
- deny   ip any any
 !
 !
 !
@@ -250,9 +228,6 @@ control-plane
 !
 !
 !
-banner login ^C
-Welcome to Area 51
-^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
@@ -267,16 +242,9 @@ line con 0
  exec-timeout 0 0
  stopbits 1
 line vty 0 4
- access-class 100 in
- logging synchronous
  login local
  transport input ssh
-line vty 5 15
- access-class 100 in
- logging synchronous
- login
 !
-netconf ssh
 !
 !
 !
