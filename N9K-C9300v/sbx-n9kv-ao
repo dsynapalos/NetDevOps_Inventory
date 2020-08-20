@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Wed Aug 19 05:20:24 2020
-!Time: Wed Aug 19 05:22:20 2020
+!Running configuration last done at: Thu Aug 20 05:16:55 2020
+!Time: Thu Aug 20 05:20:22 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao
@@ -18,7 +18,6 @@ feature bash-shell
 feature scp-server
 feature ospf
 feature bgp
-feature pim
 feature netconf
 feature restconf
 feature grpc
@@ -88,7 +87,6 @@ ntp source-interface mgmt0
 ntp authenticate
 ntp authentication-key 1 md5 QPTFmtc 7
 
-ip pim rp-address 192.168.1.1 group-list 224.0.0.0/4
 vlan 1-9,100-105
 vlan 100
   name mgmt
@@ -103,7 +101,6 @@ vlan 104
 vlan 105
   name iot
 
-vrf context Tenant
 vrf context management
   ip route 0.0.0.0/0 10.10.20.254
 
@@ -154,6 +151,7 @@ interface Ethernet1/2
   channel-group 11
 
 interface Ethernet1/3
+  switchport access vlan 171
 
 interface Ethernet1/4
 
@@ -294,9 +292,9 @@ interface loopback1
 interface loopback30
   description My Learning Lab Loopback
 
-interface loopback63
+interface loopback45
   description Configured using OpenConfig Model
-  ip address 18.98.98.1/24
+  ip address 10.95.96.1/24
 
 interface loopback98
   description Configured using OpenConfig Model
@@ -313,15 +311,12 @@ boot nxos bootflash:/nxos.9.3.3.bin sup-1
 router ospf 1
   router-id 172.16.0.1
   passive-interface default
-router ospf 21
-  router-id 1.1.1.1
-  area 0.0.0.2 stub
-  area 0.0.0.0 authentication message-digest
 router bgp 65535
   router-id 172.16.0.1
   timers prefix-peer-timeout 30
   address-family ipv4 unicast
     network 172.16.0.0/16
+    network 172.16.0.1/32
   neighbor 172.16.0.2
     remote-as 65535
 

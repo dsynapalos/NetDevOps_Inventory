@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 6818 bytes
+Current configuration : 7584 bytes
 !
-! Last configuration change at 13:10:27 UTC Wed Aug 19 2020 by developer
+! Last configuration change at 13:10:28 UTC Thu Aug 20 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -19,6 +19,7 @@ boot-end-marker
 !
 !
 no logging console
+logging monitor alerts
 enable secret 9 $9$PvdeTeuxxh0ygk$PSg0GTG2I7bluI51e.IvfEu2uxy56e/9/PgqzFUklso
 !
 no aaa new-model
@@ -38,6 +39,7 @@ call-home
 !
 !
 ip domain name abc.inc
+ip multicast-routing distributed
 !
 !
 !
@@ -78,6 +80,9 @@ crypto pki trustpoint TP-self-signed-1059130051
 !
 crypto pki trustpoint SLA-TrustPoint
  enrollment pkcs12
+ revocation-check crl
+!
+crypto pki trustpoint CA-Server
  revocation-check crl
 !
 !
@@ -139,8 +144,9 @@ crypto pki certificate chain SLA-TrustPoint
   418616A9 4093E049 4D10AB75 27E86F73 932E35B5 8862FDAE 0275156F 719BB2F0 
   D697DF7F 28
   	quit
+crypto pki certificate chain CA-Server
 !
-license udi pid CSR1000V sn 9RHJDQIQWNY
+license udi pid CSR1000V sn 9EWUCSERMI3
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -179,28 +185,57 @@ redundancy
 ! 
 !
 !
+interface Loopback1
+ description loop1
+ no ip address
+!
+interface Loopback2
+ description loop2
+ ip address 4.4.4.4 255.255.255.0
+!
+interface Loopback3
+ ip address 5.5.5.5 255.255.255.0
+!
+interface Loopback88
+ description felipe
+ ip address 88.88.88.1 255.255.255.0
+!
+interface Loopback90
+ description felipe
+ ip address 90.90.90.1 255.255.255.0
+!
+interface Loopback100
+ description RESTCONF Test
+ ip address 192.168.69.69 255.255.255.255
+!
 interface GigabitEthernet1
- description MANAGEMENT INTERFACE - DON'T TOUCH ME
+ description Eth1
  ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet2
- description Network Interface
- no ip address
- shutdown
+ description Eth2
+ ip address 100.100.100.1 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet3
- description Network Interface
- no ip address
- shutdown
+ description Netconf configuration
+ ip address 3.3.3.3 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
+!
+router ospf 100
+ network 0.0.0.0 255.255.255.255 area 0
+!
+router bgp 65530
+ bgp log-neighbor-changes
+ aggregate-address 10.203.48.0 255.255.254.0
+ redistribute static
 !
 ip forward-protocol nd
 ip http server
@@ -213,6 +248,7 @@ ip ssh version 2
 ip scp server enable
 !
 !
+logging host 172.16.1.1
 !
 !
 !
