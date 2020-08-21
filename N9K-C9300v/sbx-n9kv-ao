@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Thu Aug 20 05:16:55 2020
-!Time: Thu Aug 20 05:20:22 2020
+!Running configuration last done at: Fri Aug 21 05:13:16 2020
+!Time: Fri Aug 21 05:14:51 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao
@@ -151,7 +151,6 @@ interface Ethernet1/2
   channel-group 11
 
 interface Ethernet1/3
-  switchport access vlan 171
 
 interface Ethernet1/4
 
@@ -292,10 +291,6 @@ interface loopback1
 interface loopback30
   description My Learning Lab Loopback
 
-interface loopback45
-  description Configured using OpenConfig Model
-  ip address 10.95.96.1/24
-
 interface loopback98
   description Configured using OpenConfig Model
   ip address 10.98.98.1/24
@@ -316,7 +311,6 @@ router bgp 65535
   timers prefix-peer-timeout 30
   address-family ipv4 unicast
     network 172.16.0.0/16
-    network 172.16.0.1/32
   neighbor 172.16.0.2
     remote-as 65535
 

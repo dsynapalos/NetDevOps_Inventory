@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Thu Aug 20 19:36:45 2020 by admin
+!! Last configuration change at Fri Aug 21 19:36:44 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
@@ -8,6 +8,17 @@ username admin
  group root-lr
  group cisco-support
  secret 5 $1$oN8e$ft916PCBogrqPKt59kepW0
+!
+vrf MGMT
+ address-family ipv4 unicast
+  import route-target
+   1:1
+   2:2
+  !
+  export route-target
+   1:1
+  !
+ !
 !
 tpa
  vrf default
