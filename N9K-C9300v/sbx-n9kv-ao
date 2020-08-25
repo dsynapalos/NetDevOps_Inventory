@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Mon Aug 24 05:03:04 2020
-!Time: Mon Aug 24 05:04:44 2020
+!Running configuration last done at: Tue Aug 25 04:59:55 2020
+!Time: Tue Aug 25 05:01:54 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao
@@ -87,6 +87,16 @@ ntp source-interface mgmt0
 ntp authenticate
 ntp authentication-key 1 md5 QPTFmtc 7
 
+ip route 10.2.135.0/24 Null0
+ip route 10.2.137.0/24 Null0
+ip route 10.2.138.0/24 Null0
+ip route 10.2.139.0/24 Null0
+ip route 10.250.221.0/24 Null0
+ip route 10.250.222.0/24 Null0
+ip route 10.250.223.0/24 Null0
+ip route 10.250.224.0/24 Null0
+ip route 10.250.225.0/24 Null0
+ip route 10.250.231.0/24 Null0
 vlan 1-9,100-105
 vlan 100
   name mgmt

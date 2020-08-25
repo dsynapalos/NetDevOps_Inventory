@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 8980 bytes
+Current configuration : 7350 bytes
 !
-! Last configuration change at 13:10:38 UTC Mon Aug 24 2020 by developer
+! Last configuration change at 13:10:36 UTC Tue Aug 25 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -141,7 +141,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 92TQ931LW6O
+license udi pid CSR1000V sn 9YI8OUAJ2SY
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -180,13 +180,6 @@ redundancy
 ! 
 !
 !
-interface Loopback33
- description netconf
- ip address 2.2.2.2 255.255.255.0
-!
-interface Loopback3192
- no ip address
-!
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
@@ -197,55 +190,23 @@ interface GigabitEthernet1
 interface GigabitEthernet2
  description Network Interface
  no ip address
- shutdown
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet3
  description Network Interface
- ip address dhcp
+ no ip address
+ shutdown
  negotiation auto
  no mop enabled
  no mop sysid
-!
-router ospf 1234
- max-metric router-lsa
 !
 ip forward-protocol nd
 ip http server
 ip http authentication local
 ip http secure-server
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
-ip route 10.0.48.0 255.255.240.0 Null0
-ip route 10.0.64.0 255.255.240.0 Null0
-ip route 10.2.135.0 255.255.255.0 Null0
-ip route 10.2.137.0 255.255.255.0 Null0
-ip route 10.2.138.0 255.255.255.0 Null0
-ip route 10.2.139.0 255.255.255.0 Null0
-ip route 10.2.140.0 255.255.255.0 Null0
-ip route 10.2.142.0 255.255.255.0 Null0
-ip route 10.240.0.0 255.255.255.248 Null0
-ip route 10.240.0.8 255.255.255.252 Null0
-ip route 10.240.0.12 255.255.255.252 Null0
-ip route 10.240.0.16 255.255.255.252 Null0
-ip route 10.250.208.0 255.255.255.0 Null0
-ip route 10.250.210.0 255.255.255.0 Null0
-ip route 10.250.211.0 255.255.255.0 Null0
-ip route 10.250.212.0 255.255.255.0 Null0
-ip route 10.250.213.128 255.255.255.128 Null0
-ip route 10.250.215.0 255.255.255.0 Null0
-ip route 10.250.216.0 255.255.255.0 Null0
-ip route 10.250.217.0 255.255.255.0 Null0
-ip route 10.250.218.0 255.255.255.0 Null0
-ip route 10.250.219.0 255.255.255.0 Null0
-ip route 10.250.220.0 255.255.255.0 Null0
-ip route 10.250.221.0 255.255.255.0 Null0
-ip route 10.250.222.0 255.255.255.0 Null0
-ip route 10.250.223.0 255.255.255.0 Null0
-ip route 10.250.224.0 255.255.255.0 Null0
-ip route 10.250.225.0 255.255.255.0 Null0
-ip route 10.250.231.0 255.255.255.0 Null0
 ip route 10.250.232.0 255.255.255.0 Null0
 ip route 10.250.235.0 255.255.255.0 Null0
 ip route 10.250.236.0 255.255.255.0 Null0
@@ -278,20 +239,7 @@ control-plane
 !
 !
 !
-banner login ^C
-Ansible test of DevNet for DET
-Why would you use Ansible instead of Cisco Prime
-I don't think you would unless you can't afford Prime
-^C
-banner motd ^C
-Welcome to the DevNet Sandbox for CSR1000v and IOS XE
-
-The following programmability features are already enabled:
-  - NETCONF
-  - RESTCONF
-
-Thanks for stopping by.
-^C
+banner motd ^CLeave Me Alone!!!!!!!!!!!!!!!!!!!!!!!!^C
 !
 line con 0
  exec-timeout 0 0
@@ -300,6 +248,7 @@ line vty 0 4
  login local
  transport input ssh
 !
+ntp server 4.4.4.4
 !
 !
 !

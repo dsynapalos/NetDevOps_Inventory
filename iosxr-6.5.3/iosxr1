@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Mon Aug 24 19:33:08 2020 by admin
+!! Last configuration change at Tue Aug 25 19:33:03 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
