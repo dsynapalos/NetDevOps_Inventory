@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 6818 bytes
+Current configuration : 7147 bytes
 !
-! Last configuration change at 13:10:31 UTC Wed Aug 26 2020 by developer
+! Last configuration change at 13:10:51 UTC Thu Aug 27 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -179,8 +179,22 @@ redundancy
 ! 
 !
 !
+interface Loopback1
+ ip address 10.9.98.1 255.255.255.0
+!
+interface Loopback101
+ ip address 10.99.98.1 255.255.255.0
+!
+interface Loopback1000
+ description Agregadad desde SSH por Villalobos
+ ip address 1.2.3.5 255.255.255.255
+!
+interface Loopback1001
+ description Configured-update by RESTCONF
+ ip address 172.16.100.1 255.255.255.0
+!
 interface GigabitEthernet1
- description MANAGEMENT INTERFACE - DON'T TOUCH ME
+ description a
  ip address 10.10.20.48 255.255.255.0
  negotiation auto
  no mop enabled
@@ -188,8 +202,7 @@ interface GigabitEthernet1
 !
 interface GigabitEthernet2
  description Network Interface
- no ip address
- shutdown
+ ip address 10.0.0.1 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
@@ -241,6 +254,7 @@ line vty 0 4
  login local
  transport input ssh
 !
+ntp server 10.1.1.1
 !
 !
 !

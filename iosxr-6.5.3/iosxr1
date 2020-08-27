@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Wed Aug 26 19:32:57 2020 by admin
+!! Last configuration change at Thu Aug 27 19:33:27 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
@@ -26,6 +26,9 @@ line default
  absolute-timeout 0
  session-timeout 0
  transport input ssh
+!
+ntp
+ server 1.1.1.1
 !
 call-home
  service active
@@ -96,6 +99,15 @@ l2vpn
     pw-class ethernet
    !
   !
+ !
+!
+telemetry model-driven
+ sensor-group Sgroup101
+  sensor-path Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization
+  sensor-path Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary
+  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/data-rate
+  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
+  sensor-path Cisco-IOS-XR-ip-rib-ipv4-oper:rib/vrfs/vrf/afs/af/safs/saf/ip-rib-route-table-names/ip-rib-route-table-name/protocol/bgp/as/information
  !
 !
 xml agent tty

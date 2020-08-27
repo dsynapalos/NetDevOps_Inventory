@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Wed Aug 26 04:56:08 2020
-!Time: Wed Aug 26 04:57:51 2020
+!Running configuration last done at: Thu Aug 27 04:53:23 2020
+!Time: Thu Aug 27 04:57:07 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao
@@ -22,7 +22,6 @@ feature netconf
 feature restconf
 feature grpc
 feature interface-vlan
-feature telemetry
 
 username admin password 5 $5$QHsjkRNS$AmVcv7uxx4xYtWYCiinb.T5Jmkzm1rQ7G0ccMjXqzIC  role network-admin
 
@@ -88,7 +87,7 @@ ntp source-interface mgmt0
 ntp authenticate
 ntp authentication-key 1 md5 QPTFmtc 7
 
-vlan 1-9,100-105,110,200
+vlan 1-9,100-105
 vlan 100
   name mgmt
 vlan 101
@@ -101,10 +100,6 @@ vlan 104
   name security
 vlan 105
   name iot
-vlan 110
-  name LL_VLAN_DEMO110
-vlan 200
-  name NX-API_TEST_VL
 
 vrf context management
   ip route 0.0.0.0/0 10.10.20.254
@@ -293,14 +288,7 @@ interface mgmt0
 interface loopback1
   ip address 172.16.0.1/32
 
-interface loopback2
-  description don't delete this
-  ip address 2.2.2.2/32
-
 interface loopback30
-  description My Learning Lab Loopback
-
-interface loopback50
   description My Learning Lab Loopback
 
 interface loopback98
@@ -327,16 +315,3 @@ router bgp 65535
     remote-as 65535
 
 no logging console
-
-telemetry
-  destination-profile
-    use-vrf default
-    source-interface Ethernet1/1
-  destination-group 100
-    ip address 12.12.12.12 port 50000 protocol gRPC encoding GPB 
-  sensor-group 1
-    path sys/bgp depth unbounded
-    path sys/intf depth unbounded
-  subscription 100
-    dst-grp 100
-    snsr-grp 1 sample-interval 1000
