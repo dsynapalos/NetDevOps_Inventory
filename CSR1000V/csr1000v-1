@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7147 bytes
+Current configuration : 7307 bytes
 !
-! Last configuration change at 13:10:51 UTC Thu Aug 27 2020 by developer
+! Last configuration change at 13:10:43 UTC Sat Aug 29 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -41,6 +41,7 @@ ip domain name abc.inc
 !
 !
 !
+login block-for 5 attempts 3 within 60
 login on-success log
 !
 !
@@ -140,7 +141,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9V26DT77EPW
+license udi pid CSR1000V sn 98644GF2F9B
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -179,30 +180,24 @@ redundancy
 ! 
 !
 !
-interface Loopback1
- ip address 10.9.98.1 255.255.255.0
-!
-interface Loopback101
- ip address 10.99.98.1 255.255.255.0
-!
-interface Loopback1000
- description Agregadad desde SSH por Villalobos
- ip address 1.2.3.5 255.255.255.255
-!
-interface Loopback1001
- description Configured-update by RESTCONF
- ip address 172.16.100.1 255.255.255.0
+interface VirtualPortGroup0
+ ip address 192.168.1.1 255.255.255.0
+ ip nat inside
+ no mop enabled
+ no mop sysid
 !
 interface GigabitEthernet1
- description a
+ description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
+ ip nat outside
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet2
  description Network Interface
- ip address 10.0.0.1 255.255.255.0
+ no ip address
+ shutdown
  negotiation auto
  no mop enabled
  no mop sysid
@@ -215,16 +210,21 @@ interface GigabitEthernet3
  no mop enabled
  no mop sysid
 !
+iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
 ip http secure-server
+ip nat inside source list NAT-ACL interface GigabitEthernet1 overload
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
 !
 ip ssh rsa keypair-name ssh-key
 ip ssh version 2
 ip scp server enable
 !
+!
+ip access-list standard NAT-ACL
+ permit 192.168.1.0 0.0.0.255
 !
 !
 !
@@ -253,11 +253,17 @@ line con 0
 line vty 0 4
  login local
  transport input ssh
-!
-ntp server 10.1.1.1
-!
-!
+line vty 5 530
+ login
 !
 !
 !
+!
+!
+!
+!
+app-hosting appid guestshell
+ app-vnic gateway0 virtualportgroup 0 guest-interface 0
+  guest-ipaddress 192.168.1.2 netmask 255.255.255.0
+ name-server0 8.8.8.8
 end
