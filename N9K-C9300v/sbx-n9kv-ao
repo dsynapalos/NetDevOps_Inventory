@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Sat Aug 29 04:44:54 2020
-!Time: Sat Aug 29 04:45:13 2020
+!Running configuration last done at: Sun Aug 30 04:38:52 2020
+!Time: Sun Aug 30 04:40:38 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao
@@ -21,7 +21,6 @@ feature bgp
 feature netconf
 feature restconf
 feature grpc
-feature port-security
 feature interface-vlan
 
 username admin password 5 $5$QHsjkRNS$AmVcv7uxx4xYtWYCiinb.T5Jmkzm1rQ7G0ccMjXqzIC  role network-admin
@@ -48,12 +47,6 @@ aaa group server radius AAA-Radius-Group
     server 172.16.1.12 
     server 172.16.1.13 
     use-vrf management
-ip access-list 767
-  10 permit icmp 1.2.3.4 0.0.0.255 any 
-vlan access-map VLAN-ACCESS-MAP 767
-  match ip address 767
-  action drop
-vlan filter VLAN-ACCESS-MAP vlan-list 767
 copp profile strict
 snmp-server contact DevNet-Sandbox
 snmp-server location Always-On-Sandbox
@@ -142,8 +135,6 @@ interface Vlan105
   description iot svi - DEMO PLEASE DON'T TOUCH
   ip address 172.16.105.1/24
   ip router ospf 1 area 0.0.0.0
-
-interface port-channel1
 
 interface port-channel11
   switchport mode trunk
@@ -276,10 +267,8 @@ interface Ethernet1/56
 interface Ethernet1/57
 
 interface Ethernet1/58
-  switchport port-security
 
 interface Ethernet1/59
-  switchport port-security
 
 interface Ethernet1/60
 
@@ -313,7 +302,6 @@ line console
   exec-timeout 0
   terminal width  511
 line vty
-  session-limit 39
 boot nxos bootflash:/nxos.9.3.3.bin sup-1
 router ospf 1
   router-id 172.16.0.1

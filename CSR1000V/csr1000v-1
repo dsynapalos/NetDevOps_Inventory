@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7307 bytes
+Current configuration : 7320 bytes
 !
-! Last configuration change at 13:10:43 UTC Sat Aug 29 2020 by developer
+! Last configuration change at 13:10:26 UTC Sun Aug 30 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -163,6 +163,7 @@ redundancy
 !
 !
 !
+cdp run
 ! 
 !
 !
@@ -181,6 +182,7 @@ redundancy
 !
 !
 interface VirtualPortGroup0
+ description cisco
  ip address 192.168.1.1 255.255.255.0
  ip nat inside
  no mop enabled
@@ -195,9 +197,8 @@ interface GigabitEthernet1
  no mop sysid
 !
 interface GigabitEthernet2
- description Network Interface
+ description Knox WUZ here
  no ip address
- shutdown
  negotiation auto
  no mop enabled
  no mop sysid
