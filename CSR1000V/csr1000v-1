@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7320 bytes
+Current configuration : 6951 bytes
 !
-! Last configuration change at 13:10:26 UTC Sun Aug 30 2020 by developer
+! Last configuration change at 13:10:27 UTC Mon Aug 31 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -41,7 +41,6 @@ ip domain name abc.inc
 !
 !
 !
-login block-for 5 attempts 3 within 60
 login on-success log
 !
 !
@@ -141,7 +140,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 98644GF2F9B
+license udi pid CSR1000V sn 90VH4JUKS62
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -163,7 +162,6 @@ redundancy
 !
 !
 !
-cdp run
 ! 
 !
 !
@@ -180,24 +178,16 @@ cdp run
 ! 
 ! 
 !
-!
-interface VirtualPortGroup0
- description cisco
- ip address 192.168.1.1 255.255.255.0
- ip nat inside
- no mop enabled
- no mop sysid
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
- ip nat outside
  negotiation auto
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet2
- description Knox WUZ here
+ description Network Interface
  no ip address
  negotiation auto
  no mop enabled
@@ -211,21 +201,19 @@ interface GigabitEthernet3
  no mop enabled
  no mop sysid
 !
-iox
+router bgp 65000
+ bgp log-neighbor-changes
+!
 ip forward-protocol nd
 ip http server
 ip http authentication local
 ip http secure-server
-ip nat inside source list NAT-ACL interface GigabitEthernet1 overload
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
 !
 ip ssh rsa keypair-name ssh-key
 ip ssh version 2
 ip scp server enable
 !
-!
-ip access-list standard NAT-ACL
- permit 192.168.1.0 0.0.0.255
 !
 !
 !
@@ -254,17 +242,13 @@ line con 0
 line vty 0 4
  login local
  transport input ssh
-line vty 5 530
- login
 !
 !
 !
 !
 !
+event manager applet NAME
+ event syslog pattern "interface fast"
+ action 1.0 cli command "enable"
 !
-!
-app-hosting appid guestshell
- app-vnic gateway0 virtualportgroup 0 guest-interface 0
-  guest-ipaddress 192.168.1.2 netmask 255.255.255.0
- name-server0 8.8.8.8
 end
