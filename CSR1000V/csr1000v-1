@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 6951 bytes
+Current configuration : 7474 bytes
 !
-! Last configuration change at 13:10:27 UTC Mon Aug 31 2020 by developer
+! Last configuration change at 13:10:34 UTC Tue Sep 1 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -30,6 +30,7 @@ call-home
   active
   destination transport-method http
   no destination transport-method email
+fhrp version vrrp v3
 !
 !
 !
@@ -140,11 +141,14 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 90VH4JUKS62
+license udi pid CSR1000V sn 9PW2JOPDD3E
 license boot level ax
 diagnostic bootup level minimal
 !
 spanning-tree extend system-id
+archive
+ path bootflash:/rollback-config
+ write-memory
 memory free low-watermark processor 80557
 !
 netconf-yang
@@ -179,9 +183,19 @@ redundancy
 ! 
 !
 !
+interface Loopback21
+ no ip address
+!
+interface VirtualPortGroup0
+ ip address 10.1.1.1 255.255.255.0
+ ip nat inside
+ no mop enabled
+ no mop sysid
+!
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
+ ip nat outside
  negotiation auto
  no mop enabled
  no mop sysid
@@ -189,7 +203,13 @@ interface GigabitEthernet1
 interface GigabitEthernet2
  description Network Interface
  no ip address
+ shutdown
  negotiation auto
+ vrrp 10 address-family ipv4
+  timers advertise 340
+  priority 110
+  address 172.16.10.254 primary
+  exit-vrrp
  no mop enabled
  no mop sysid
 !
@@ -201,19 +221,21 @@ interface GigabitEthernet3
  no mop enabled
  no mop sysid
 !
-router bgp 65000
- bgp log-neighbor-changes
-!
+iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
 ip http secure-server
+ip nat inside source list GS_NAT_ACL interface GigabitEthernet1 overload
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
 !
 ip ssh rsa keypair-name ssh-key
 ip ssh version 2
 ip scp server enable
 !
+!
+ip access-list standard GS_NAT_ACL
+ permit 10.1.1.0 0.0.0.255
 !
 !
 !
@@ -247,8 +269,10 @@ line vty 0 4
 !
 !
 !
-event manager applet NAME
- event syslog pattern "interface fast"
- action 1.0 cli command "enable"
 !
+!
+app-hosting appid guestshell
+ app-vnic gateway0 virtualportgroup 0 guest-interface 0
+  guest-ipaddress 10.1.1.2 netmask 255.255.255.0
+ name-server0 208.67.222.222
 end
