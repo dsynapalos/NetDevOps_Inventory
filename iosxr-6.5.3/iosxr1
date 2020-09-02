@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Tue Sep  1 19:32:53 2020 by admin
+!! Last configuration change at Wed Sep  2 19:33:04 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
@@ -61,7 +61,7 @@ interface MgmtEth0/RP0/CPU0/0
  ipv4 address 10.10.20.175 255.255.255.0
 !
 interface GigabitEthernet0/0/0/0
- shutdown
+ ipv4 address 10.1.1.1 255.255.255.0
 !
 interface GigabitEthernet0/0/0/1
  shutdown
@@ -84,6 +84,58 @@ interface GigabitEthernet0/0/0/6
 router static
  address-family ipv4 unicast
   0.0.0.0/0 10.10.20.254
+ !
+!
+router ospf 100
+ network point-to-point
+ mpls ldp sync
+ nsf ietf
+ timers throttle lsa all 5 100 5000
+ timers throttle spf 100 100 5000
+ timers lsa min-arrival 50
+ auto-cost reference-bandwidth 4000000
+ max-metric router-lsa on-startup wait-for-bgp include-stub summary-lsa external-lsa
+ area 0
+  authentication message-digest
+  mpls traffic-eng
+  interface Bundle-Ether99
+  !
+  interface GigabitEthernet0/0/0/0
+   cost 100
+  !
+  interface GigabitEthernet0/0/0/1
+   cost 100
+  !
+  interface GigabitEthernet0/0/0/3
+   cost 100
+  !
+ !
+!
+router bgp 100
+ address-family ipv4 unicast
+ !
+ address-family ipv6 unicast
+ !
+ neighbor 10.0.0.1
+  remote-as 200
+  address-family ipv4 unicast
+  !
+  address-family ipv6 unicast
+  !
+ !
+ neighbor 10.0.0.2
+  remote-as 200
+  address-family ipv4 unicast
+  !
+  address-family ipv6 unicast
+  !
+ !
+ neighbor 10.0.0.3
+  remote-as 200
+  address-family ipv4 unicast
+  !
+  address-family ipv6 unicast
+  !
  !
 !
 l2vpn
@@ -112,6 +164,11 @@ l2vpn
   !
  !
 !
+router igmp
+ interface GigabitEthernet0/0/0/0
+  router enable
+ !
+!
 telemetry model-driven
  sensor-group Sgroup101
   sensor-path Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization
@@ -130,6 +187,8 @@ netconf-yang agent
  ssh
 !
 lldp
+!
+router pim
 !
 ssh server v2
 ssh server vrf default
