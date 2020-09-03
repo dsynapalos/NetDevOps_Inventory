@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 5433 bytes
+Current configuration : 6245 bytes
 !
-! Last configuration change at 13:10:50 UTC Wed Sep 2 2020 by developer
+! Last configuration change at 13:10:41 UTC Thu Sep 3 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -28,6 +28,16 @@ call-home
  contact-email-addr sch-smart-licensing@cisco.com
  profile "CiscoTAC-1"
   active
+!
+ip vrf Global
+ rd 3352:102
+ route-target export 3352:102
+ route-target import 3352:102
+!
+ip vrf Pais
+ rd 3352:101
+ route-target export 3352:101
+ route-target import 3352:101
 !
 !
 !
@@ -138,6 +148,7 @@ redundancy
 !
 !
 !
+cdp run
 ! 
 !
 !
@@ -155,14 +166,9 @@ redundancy
 ! 
 !
 !
-interface Loopback10
- ip address 1.1.1.1 255.255.255.0
-!
-interface Loopback21
- no ip address
-!
-interface Loopback22
- no ip address
+interface Loopback1234
+ description Added with RESTCONF
+ ip address 1.2.3.4 255.255.255.255
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -172,9 +178,8 @@ interface GigabitEthernet1
  no mop sysid
 !
 interface GigabitEthernet2
- description Network Interface
- no ip address
- shutdown
+ description configured by YDK
+ ip address 10.255.255.1 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
@@ -182,11 +187,32 @@ interface GigabitEthernet2
 interface GigabitEthernet3
  description Network Interface
  no ip address
- shutdown
  negotiation auto
  no mop enabled
  no mop sysid
 !
+interface GigabitEthernet3.1
+ ip vrf forwarding Pais
+!
+interface GigabitEthernet3.2
+ ip vrf forwarding Global
+!
+interface vasileft1
+ ip vrf forwarding Global
+ no ip address
+ no keepalive
+!
+interface vasileft2
+ ip vrf forwarding Global
+ no ip address
+ no keepalive
+!
+interface vasiright1
+ ip vrf forwarding Pais
+ no ip address
+ no keepalive
+!
+iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
@@ -210,8 +236,12 @@ control-plane
 !
 !
 banner exec ^Cexec banner^C
-banner login ^Clogin banner^C
+banner login ^C
+Quick banner, this device is being managed by Ansible.
+^C
 banner motd ^Cmotd banner^C
+alias exec c config
+alias exec ss show running
 !
 line con 0
  exec-timeout 0 0
@@ -220,6 +250,7 @@ line vty 0 4
  login local
  transport input ssh
 !
+ntp server 10.1.1.1
 !
 !
 !
@@ -227,8 +258,14 @@ line vty 0 4
 event manager applet detect_high_interface_rate
  event interface name GigabitEthernet1 parameter transmit_rate_bps entry-op ge entry-val 1000 entry-type value poll-interval 30
  action 0.01 syslog msg "High Tx rate detected"
- action 0.02 cli command "no event manager applet detect_high_interface_rate"
+ action 0.02 cli command "enable"
+ action 1.1  cli command "show int gigabit1 | inc output rate"
+ action 1.2  syslog msg "$_cli_result"
+ action 1.3  cli command "no event manager applet detect_high_interface_rate"
 event manager applet BACKUP
  event timer watchdog name TIMER time 30
 !
+!
+app-hosting appid guestshell
+ app-vnic management guest-interface 0
 end
