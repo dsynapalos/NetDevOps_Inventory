@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Thu Sep  3 19:33:01 2020 by admin
+!! Last configuration change at Fri Sep  4 19:52:10 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
@@ -27,14 +27,6 @@ line default
  session-timeout 0
  transport input ssh
 !
-key chain uninet_isis
- key 1
-  accept-lifetime 00:00:00 october 26 2010 infinite
-  key-string password 06130128424B1D26540443184C
-  send-lifetime 00:00:00 october 26 2010 infinite
-  cryptographic-algorithm HMAC-MD5
- !
-!
 call-home
  service active
  contact smart-licensing
@@ -43,29 +35,6 @@ call-home
   destination transport-method http
  !
 !
-!
-class-map match-any TEST
- match dscp ef 
- end-class-map
-! 
-policy-map CORE_EGRESS
- description TEST
- class TEST
-  priority level 1 
- ! 
- class class-default
- ! 
- end-policy-map
-! 
-policy-map CORE_INGRESS
- description TEST
- class TEST
-  priority level 1 
- ! 
- class class-default
- ! 
- end-policy-map
-! 
 interface Loopback100
  description ***MERGE LOOPBACK 100****
  ipv4 address 1.1.1.100 255.255.255.255
@@ -84,17 +53,7 @@ interface GigabitEthernet0/0/0/1
  shutdown
 !
 interface GigabitEthernet0/0/0/2
- description *** ASR9010_2 Te0/0/0/40 to NE8000_X8_2 25GE8/0/40 ***
- cdp
- mtu 9000
- service-policy input CORE_INGRESS
- service-policy output CORE_EGRESS
- ipv4 address 100.64.250.10 255.255.255.252
- ipv6 nd suppress-ra
- ipv6 address 2001:3c8:bb:30:40::a/127
- carrier-delay up 1000 down 0
- load-interval 30
- dampening
+ shutdown
 !
 interface GigabitEthernet0/0/0/3
  shutdown
@@ -111,115 +70,6 @@ interface GigabitEthernet0/0/0/6
 router static
  address-family ipv4 unicast
   0.0.0.0/0 10.10.20.254
- !
-!
-router isis uninet
- set-overload-bit on-startup 360
- is-type level-2-only
- net 49.0001.2020.2803.1020.00
- nsf cisco
- log adjacency changes
- lsp-gen-interval maximum-wait 5000 initial-wait 1 secondary-wait 50
- lsp-refresh-interval 65000
- max-lsp-lifetime 65535
- address-family ipv4 unicast
-  metric-style wide
-  mpls traffic-eng level-2-only
-  mpls traffic-eng router-id Loopback0
-  spf-interval maximum-wait 5000 initial-wait 1 secondary-wait 50
-  maximum-paths 32
-  router-id Loopback0
-  segment-routing mpls sr-prefer
- !
- address-family ipv6 unicast
-  metric-style wide
-  spf-interval maximum-wait 5000 initial-wait 1 secondary-wait 50
-  maximum-paths 32
-  single-topology
- !
- interface GigabitEthernet0/0/0/2
-  circuit-type level-2-only
-  bfd minimum-interval 250
-  bfd multiplier 3
-  bfd fast-detect ipv4
-  bfd fast-detect ipv6
-  point-to-point
-  hello-padding disable
-  hello-password keychain uninet_isis
-  address-family ipv4 unicast
-   fast-reroute per-prefix
-   metric 30
-   mpls ldp sync
-  !
-  address-family ipv6 unicast
-   metric 30
-  !
- !
-!
-router ospf 100
- max-metric router-lsa include-stub summary-lsa external-lsa
-!
-router bgp 4621
- nsr
- bgp router-id 202.28.31.20
- bgp graceful-restart graceful-reset
- bgp graceful-restart
- address-family ipv4 unicast
- !
- address-family ipv4 multicast
- !
- address-family vpnv4 unicast
- !
- address-family ipv6 unicast
-  additional-paths receive
-  additional-paths send
- !
- address-family ipv6 multicast
- !
- address-family ipv4 mdt
- !
- neighbor 202.28.31.40
-  remote-as 4621
-  update-source Loopback0
-  address-family ipv4 unicast
-   maximum-prefix 1048576 80 warning-only
-   next-hop-self
-  !
-  address-family ipv4 multicast
-   next-hop-self
-  !
-  address-family vpnv4 unicast
-   next-hop-self
-  !
-  address-family ipv6 labeled-unicast
-   next-hop-self
-  !
- !
- neighbor 2001:3c8:1201::40
-  remote-as 4621
-  update-source Loopback0
-  address-family ipv6 unicast
-   maximum-prefix 524288 80 warning-only
-   next-hop-self
-  !
- !
-!
-l2vpn
- pw-class my-mpls
-  encapsulation mpls
-   transport-mode vlan
-  !
- !
- pw-class ethernet
-  encapsulation mpls
-   transport-mode ethernet
-  !
- !
- pw-class control-word
-  encapsulation mpls
-   control-word
-   transport-mode vlan
-  !
  !
 !
 xml agent tty
