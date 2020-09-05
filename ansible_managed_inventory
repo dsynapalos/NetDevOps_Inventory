@@ -8,4 +8,4 @@ csr1000v-1 ansible_host=ios-xe-mgmt-latest.cisco.com
 [iosxr-6.5.3]
 iosxr1 ansible_host=sbx-iosxr-mgmt.cisco.com
 [N9K-C9300v]
-sbx-n9kv-ao ansible_host=sbx-nxos-mgmt.cisco.com
+sbx-ao ansible_host=sbx-nxos-mgmt.cisco.com
