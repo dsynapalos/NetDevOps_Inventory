@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Sat Sep  5 19:51:47 2020 by admin
+!! Last configuration change at Sun Sep  6 20:08:19 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
@@ -69,13 +69,13 @@ interface Loopback100
 !
 interface Loopback200
  description ***MERGE LOOPBACK 200****
- ipv4 address 1.1.1.200 255.255.255.255
+ ipv4 address 200.200.200.1 255.255.255.255
 !
 interface MgmtEth0/RP0/CPU0/0
  ipv4 address 10.10.20.175 255.255.255.0
 !
 interface GigabitEthernet0/0/0/0
- ipv4 address 1.2.3.4 255.255.255.0
+ shutdown
 !
 interface GigabitEthernet0/0/0/1
  shutdown
@@ -165,23 +165,6 @@ router bgp 4621
  address-family ipv6 multicast
  !
  address-family ipv4 mdt
- !
- neighbor 202.28.31.30
-  remote-as 4621
-  update-source Loopback0
-  address-family ipv4 unicast
-   maximum-prefix 1048576 80 warning-only
-   next-hop-self
-  !
-  address-family ipv4 multicast
-   next-hop-self
-  !
-  address-family vpnv4 unicast
-   next-hop-self
-  !
-  address-family ipv6 labeled-unicast
-   next-hop-self
-  !
  !
 !
 l2vpn
