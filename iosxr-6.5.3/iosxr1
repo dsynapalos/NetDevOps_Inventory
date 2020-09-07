@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Sun Sep  6 20:08:19 2020 by admin
+!! Last configuration change at Mon Sep  7 22:27:52 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
@@ -61,6 +61,18 @@ policy-map CORE_INGRESS
 interface Loopback0
  ipv4 address 202.28.31.20 255.255.255.255
  ipv6 address 2001:3c8:1201::20/128
+!
+interface Loopback10
+ description Create10
+!
+interface Loopback20
+ description create20
+!
+interface Loopback30
+ description Create30
+!
+interface Loopback40
+ description Create40
 !
 interface Loopback100
  description Routing TEST
@@ -146,6 +158,9 @@ router isis uninet
    metric 30
   !
  !
+!
+router ospf 100
+ max-metric router-lsa include-stub summary-lsa external-lsa
 !
 router bgp 4621
  nsr

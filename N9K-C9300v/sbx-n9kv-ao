@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Sun Sep  6 04:14:09 2020
-!Time: Sun Sep  6 04:16:06 2020
+!Running configuration last done at: Mon Sep  7 06:30:11 2020
+!Time: Mon Sep  7 06:32:25 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao
@@ -87,7 +87,7 @@ ntp source-interface mgmt0
 ntp authenticate
 ntp authentication-key 1 md5 QPTFmtc 7
 
-vlan 1-9,100-105,200
+vlan 1-9,100-105
 vlan 100
   name mgmt
 vlan 101
@@ -100,8 +100,6 @@ vlan 104
   name security
 vlan 105
   name iot
-vlan 200
-  name ght
 
 vrf context management
   ip route 0.0.0.0/0 10.10.20.254
@@ -290,13 +288,7 @@ interface mgmt0
 interface loopback1
   ip address 172.16.0.1/32
 
-interface loopback3
-  description My Learning Lab Loopback
-
 interface loopback30
-  description My Learning Lab Loopback
-
-interface loopback40
   description My Learning Lab Loopback
 
 interface loopback98

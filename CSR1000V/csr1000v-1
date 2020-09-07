@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 8110 bytes
+Current configuration : 8019 bytes
 !
-! Last configuration change at 13:10:37 UTC Sun Sep 6 2020 by developer
+! Last configuration change at 15:30:27 UTC Mon Sep 7 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -31,11 +31,6 @@ call-home
   destination transport-method http
   no destination transport-method email
 !
-ip vrf test
- rd 69863:11
- route-target export 69863:22
- route-target import 69863:11
-!
 !
 !
 !
@@ -61,7 +56,6 @@ subscriber templating
 ! 
 !
 !
-ipv6 unicast-routing
 multilink bundle-name authenticated
 !
 !
@@ -146,11 +140,9 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9HKD431GWOL
+license udi pid CSR1000V sn 9EFR3798ZOA
 license boot level ax
 diagnostic bootup level minimal
-
-et-analytics
 !
 spanning-tree extend system-id
 memory free low-watermark processor 80557
@@ -187,45 +179,12 @@ redundancy
 ! 
 !
 !
-interface Loopback1515
- ip address 1.5.1.5 255.255.255.255
- shutdown
-!
-interface Loopback1585
- ip address 1.5.8.5 255.255.255.255
-!
-interface Loopback1988
- description Configured by Ricardo
+interface Loopback100
+ description test python
  no ip address
 !
-interface Loopback1989
- description Configured by Ricardo
+interface Loopback5000
  no ip address
-!
-interface Loopback2597
- ip address 2.5.9.7 255.255.255.255
-!
-interface Loopback3048
- ip address 3.0.4.8 255.255.255.255
-!
-interface Loopback3274
- ip address 3.2.7.4 255.255.255.255
-!
-interface Loopback3626
- ip address 3.6.2.6 255.255.255.255
-!
-interface Loopback4946
- ip address 4.9.4.6 255.255.255.255
-!
-interface Loopback5576
- ip address 5.5.7.6 255.255.255.255
-!
-interface Loopback7920
- ip address 7.9.2.0 255.255.255.255
-!
-interface Loopback8599
- ip address 8.5.9.9 255.255.255.255
- shutdown
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -234,9 +193,13 @@ interface GigabitEthernet1
  no mop enabled
  no mop sysid
 !
+interface GigabitEthernet1.1
+ description test python
+!
 interface GigabitEthernet2
- description Configured by NETCONF
- ip address 10.255.255.1 255.255.255.0
+ description Network Interface
+ no ip address
+ shutdown
  negotiation auto
  no mop enabled
  no mop sysid
@@ -249,18 +212,36 @@ interface GigabitEthernet3
  no mop enabled
  no mop sysid
 !
-router ospf 1
- router-id 192.168.1.100
-!
-router bgp 1000
- bgp log-neighbor-changes
-!
-iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
 ip http secure-server
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
+ip route 10.2.135.0 255.255.255.0 Null0
+ip route 10.2.137.0 255.255.255.0 Null0
+ip route 10.2.138.0 255.255.255.0 Null0
+ip route 10.2.139.0 255.255.255.0 Null0
+ip route 10.250.221.0 255.255.255.0 Null0
+ip route 10.250.222.0 255.255.255.0 Null0
+ip route 10.250.223.0 255.255.255.0 Null0
+ip route 10.250.224.0 255.255.255.0 Null0
+ip route 10.250.225.0 255.255.255.0 Null0
+ip route 10.250.231.0 255.255.255.0 Null0
+ip route 10.250.232.0 255.255.255.0 Null0
+ip route 10.250.235.0 255.255.255.0 Null0
+ip route 10.250.236.0 255.255.255.0 Null0
+ip route 10.250.237.0 255.255.255.0 Null0
+ip route 10.250.238.0 255.255.255.0 Null0
+ip route 10.250.239.0 255.255.255.0 Null0
+ip route 10.250.240.0 255.255.255.0 Null0
+ip route 10.250.241.0 255.255.255.0 Null0
+ip route 10.250.242.0 255.255.255.0 Null0
+ip route 10.250.243.0 255.255.255.0 Null0
+ip route 10.250.244.0 255.255.255.0 Null0
+ip route 10.250.245.0 255.255.255.0 Null0
+ip route 10.250.246.0 255.255.255.0 Null0
+ip route 10.250.247.0 255.255.255.0 Null0
+ip route 10.250.248.0 255.255.255.0 Null0
 !
 ip ssh rsa keypair-name ssh-key
 ip ssh version 2
@@ -299,12 +280,5 @@ line vty 0 4
 !
 !
 !
-event manager applet LOOPBACK_REACTIVATE
- event syslog pattern "Line protocol (.*) changed state to down"
- action 1.0 cli command "enable"
- action 2.0 cli command "guestshell run python testscript.py $_syslog_msg"
 !
-!
-app-hosting appid guestshell
- app-vnic management guest-interface 0
 end
