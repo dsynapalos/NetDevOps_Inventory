@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Mon Sep  7 22:27:52 2020 by admin
+!! Last configuration change at Tue Sep  8 20:08:45 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
@@ -89,9 +89,6 @@ interface MgmtEth0/RP0/CPU0/0
 interface GigabitEthernet0/0/0/0
  shutdown
 !
-interface GigabitEthernet0/0/0/1
- shutdown
-!
 interface GigabitEthernet0/0/0/2
  shutdown
 !
@@ -160,6 +157,12 @@ router isis uninet
  !
 !
 router ospf 100
+ max-metric router-lsa include-stub summary-lsa external-lsa
+!
+router ospf 200
+ max-metric router-lsa include-stub summary-lsa external-lsa
+!
+router ospf 300
  max-metric router-lsa include-stub summary-lsa external-lsa
 !
 router bgp 4621

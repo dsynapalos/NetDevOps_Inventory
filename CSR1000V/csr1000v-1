@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 8019 bytes
+Current configuration : 7459 bytes
 !
-! Last configuration change at 15:30:27 UTC Mon Sep 7 2020 by developer
+! Last configuration change at 13:10:28 UTC Tue Sep 8 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -140,7 +140,7 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9EFR3798ZOA
+license udi pid CSR1000V sn 9GEEE5Q76WL
 license boot level ax
 diagnostic bootup level minimal
 !
@@ -154,6 +154,7 @@ restconf
 username developer privilege 15 secret 9 $9$fhUXi6Xg438iAE$..VhXRCHiDQy3K2zmZUl9iZLbQJ9wpUtQZwQxSRESc2
 username cisco privilege 15 secret 9 $9$COf3Q4xfzT.JxE$L3hvSkDv874Qrh8Hzdv/rPQjLNOjreYG2ocffHG7rls
 username root privilege 15 secret 9 $9$FfUDIPBFcs03AE$MyLIWEuiRle8p3yGflAGTcrJA6BUUh/oWtyyfoMQXSI
+username admin privilege 15 password 0 cisco
 !
 redundancy
 !
@@ -162,92 +163,72 @@ redundancy
 !
 !
 !
+track 667 list boolean and
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
 ! 
 !
 !
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-! 
-! 
-!
-!
-interface Loopback100
- description test python
- no ip address
-!
-interface Loopback5000
- no ip address
+interface VirtualPortGroup0
+ ip address 192.168.1.1 255.255.255.0
+ ip nat inside
+ no mop enabled
+ no mop sysid
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
+ ip nat outside
  negotiation auto
  no mop enabled
  no mop sysid
 !
-interface GigabitEthernet1.1
- description test python
-!
 interface GigabitEthernet2
  description Network Interface
  no ip address
- shutdown
  negotiation auto
+ mpls ip
  no mop enabled
  no mop sysid
 !
 interface GigabitEthernet3
  description Network Interface
- no ip address
- shutdown
+ ip address 2.2.2.2 255.255.255.252
  negotiation auto
+ mpls ip
  no mop enabled
  no mop sysid
 !
+iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
 ip http secure-server
+ip nat inside source list NAT-ACL interface GigabitEthernet1 overload
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
-ip route 10.2.135.0 255.255.255.0 Null0
-ip route 10.2.137.0 255.255.255.0 Null0
-ip route 10.2.138.0 255.255.255.0 Null0
-ip route 10.2.139.0 255.255.255.0 Null0
-ip route 10.250.221.0 255.255.255.0 Null0
-ip route 10.250.222.0 255.255.255.0 Null0
-ip route 10.250.223.0 255.255.255.0 Null0
-ip route 10.250.224.0 255.255.255.0 Null0
-ip route 10.250.225.0 255.255.255.0 Null0
-ip route 10.250.231.0 255.255.255.0 Null0
-ip route 10.250.232.0 255.255.255.0 Null0
-ip route 10.250.235.0 255.255.255.0 Null0
-ip route 10.250.236.0 255.255.255.0 Null0
-ip route 10.250.237.0 255.255.255.0 Null0
-ip route 10.250.238.0 255.255.255.0 Null0
-ip route 10.250.239.0 255.255.255.0 Null0
-ip route 10.250.240.0 255.255.255.0 Null0
-ip route 10.250.241.0 255.255.255.0 Null0
-ip route 10.250.242.0 255.255.255.0 Null0
-ip route 10.250.243.0 255.255.255.0 Null0
-ip route 10.250.244.0 255.255.255.0 Null0
-ip route 10.250.245.0 255.255.255.0 Null0
-ip route 10.250.246.0 255.255.255.0 Null0
-ip route 10.250.247.0 255.255.255.0 Null0
-ip route 10.250.248.0 255.255.255.0 Null0
+ip route 192.0.2.0 255.255.255.0 GigabitEthernet1
+ip route 203.0.113.0 255.255.255.0 10.10.20.254
 !
 ip ssh rsa keypair-name ssh-key
 ip ssh version 2
 ip scp server enable
 !
 !
+ip access-list extended NAT-ACL
+ permit ip 192.168.1.0 0.0.0.255 any
 !
 !
 !
@@ -273,6 +254,7 @@ line con 0
  exec-timeout 0 0
  stopbits 1
 line vty 0 4
+ exec-timeout 0 5
  login local
  transport input ssh
 !
@@ -281,4 +263,9 @@ line vty 0 4
 !
 !
 !
+!
+app-hosting appid guestshell
+ app-vnic gateway0 virtualportgroup 0 guest-interface 0
+  guest-ipaddress 192.168.1.2 netmask 255.255.255.0
+ name-server0 8.8.8.8
 end
