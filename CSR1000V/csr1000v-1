@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 7006 bytes
+Current configuration : 7134 bytes
 !
-! Last configuration change at 13:10:26 UTC Wed Sep 9 2020 by developer
+! Last configuration change at 13:11:02 UTC Thu Sep 10 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -152,7 +152,7 @@ netconf-yang
 restconf
 !
 username developer privilege 15 secret 9 $9$fhUXi6Xg438iAE$..VhXRCHiDQy3K2zmZUl9iZLbQJ9wpUtQZwQxSRESc2
-username cisco privilege 15 secret 9 $9$COf3Q4xfzT.JxE$L3hvSkDv874Qrh8Hzdv/rPQjLNOjreYG2ocffHG7rls
+username cisco privilege 15 secret 9 $9$4ZIXyzbS.LoEhU$xz5HKfSK8mrH5zSnvF7Sumozz09mrc1Hs0feBIP9Pic
 username root privilege 15 secret 9 $9$FfUDIPBFcs03AE$MyLIWEuiRle8p3yGflAGTcrJA6BUUh/oWtyyfoMQXSI
 !
 redundancy
@@ -180,10 +180,6 @@ cdp run
 ! 
 !
 !
-interface Loopback10
- description Configured by AB
- ip address 30.1.1.1 255.255.255.0
-!
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
@@ -191,11 +187,12 @@ interface GigabitEthernet1
  cdp enable
  no mop enabled
  no mop sysid
+ source template DefaultWiredDot1xClosedAuth
+ spanning-tree portfast
 !
 interface GigabitEthernet2
- description Network Interface
- no ip address
- shutdown
+ description RESTCONF
+ ip address 172.16.1.6 255.255.255.0
  negotiation auto
  no mop enabled
  no mop sysid
@@ -208,6 +205,7 @@ interface GigabitEthernet3
  no mop enabled
  no mop sysid
 !
+iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
@@ -231,6 +229,9 @@ control-plane
 !
 !
 !
+banner login ^C
+Built with Ansible
+^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
@@ -247,12 +248,18 @@ line con 0
 line vty 0 4
  login local
  transport input ssh
+line vty 5 15
+ login
 !
 ntp server 10.254.1.1
 ntp server 10.254.1.2
+netconf ssh
 !
 !
 !
 !
 !
+!
+app-hosting appid guestshell
+ app-vnic management guest-interface 0
 end
