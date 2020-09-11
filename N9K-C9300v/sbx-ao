@@ -1,10 +1,10 @@
 !Command: show running-config
-!Running configuration last done at: Sat Sep  5 04:17:44 2020
-!Time: Sat Sep  5 04:19:12 2020
+!No configuration change since last restart
+!Time: Fri Sep 11 03:36:19 2020
 
 version 9.3(3) Bios:version  
-hostname sbx-n9kv-ao
-vdc sbx-n9kv-ao id 1
+switchname sbx-ao
+vdc sbx-ao id 1
   limit-resource vlan minimum 16 maximum 4094
   limit-resource vrf minimum 2 maximum 4096
   limit-resource port-channel minimum 0 maximum 511
@@ -291,9 +291,6 @@ interface loopback1
 interface loopback30
   description My Learning Lab Loopback
 
-interface loopback33
-  description My Learning Lab Loopback
-
 interface loopback98
   description Configured using OpenConfig Model
   ip address 10.98.98.1/24
@@ -316,5 +313,3 @@ router bgp 65535
     network 172.16.0.0/16
   neighbor 172.16.0.2
     remote-as 65535
-
-no logging console

@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Thu Sep 10 20:24:16 2020 by admin
+!! Last configuration change at Fri Sep 11 20:24:32 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
@@ -9,6 +9,9 @@ username admin
  group cisco-support
  secret 5 $1$oN8e$ft916PCBogrqPKt59kepW0
 !
+cdp
+cdp log adjacency changes
+cdp advertise v1
 tpa
  vrf default
   address-family ipv4
@@ -39,6 +42,13 @@ interface Bundle-Ether16
  description Connected to F5-BIG-IP-DNS-I2600-01
  load-interval 30
 !
+interface Bundle-Ether16.100
+ description F5-BIG-IP-DNS-I2600-01 - Internet Access
+ vrf INTclient
+ ipv4 address 10.137.68.37 255.255.255.252
+ load-interval 30
+ encapsulation dot1q 100
+!
 interface Loopback100
  description ***MERGE LOOPBACK 100****
  ipv4 address 1.1.1.100 255.255.255.255
@@ -60,10 +70,14 @@ interface GigabitEthernet0/0/0/2
  shutdown
 !
 interface GigabitEthernet0/0/0/3
- shutdown
+ description Connected to F5-BIG-IP-DNS-I2600-01
+ bundle id 16 mode active
+ load-interval 30
 !
 interface GigabitEthernet0/0/0/4
- shutdown
+ description Connected to F5-BIG-IP-DNS-I2600-01
+ bundle id 16 mode active
+ load-interval 30
 !
 interface GigabitEthernet0/0/0/5
  shutdown
@@ -71,10 +85,27 @@ interface GigabitEthernet0/0/0/5
 interface GigabitEthernet0/0/0/6
  shutdown
 !
+interface preconfigure GigabitEthernet0/1/0/24
+ description Connected to F5-BIG-IP-DNS-I2600-01
+ bundle id 16 mode active
+ load-interval 30
+!
+interface preconfigure GigabitEthernet0/1/0/39
+ description Connected to F5-BIG-IP-DNS-I2600-01
+ bundle id 16 mode active
+ load-interval 30
+!
 router static
  address-family ipv4 unicast
   0.0.0.0/0 10.10.20.254
  !
+!
+ospf name-lookup
+router ospf 100
+ router-id 100.100.100.100
+!
+router ospf 200
+ router-id 200.200.200.200
 !
 xml agent tty
  iteration off
