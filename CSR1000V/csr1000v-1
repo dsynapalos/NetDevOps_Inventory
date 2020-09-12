@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 13664 bytes
+Current configuration : 13527 bytes
 !
-! Last configuration change at 13:05:30 UTC Fri Sep 11 2020 by developer
+! Last configuration change at 13:10:31 UTC Sat Sep 12 2020 by developer
 !
 version 16.11
 no service timestamps debug uptime
@@ -188,13 +188,13 @@ cdp run
 ! 
 !
 !
+interface Loopback0
+ description via nornir
+ no ip address
+!
 interface Loopback40
  description Configured by Me
  ip address 172.16.10.1 255.255.255.0
-!
-interface Loopback100
- description Added by YooKnowWhoo
- ip address 172.16.100.1 255.255.255.0
 !
 interface Loopback12000
  description Testing by Reikun
@@ -211,19 +211,13 @@ interface GigabitEthernet1
  spanning-tree portfast
 !
 interface GigabitEthernet2
- description I was Here
- ip address 172.16.1.6 255.255.255.0
- negotiation auto
- vrrp 2 ip 172.16.1.51
- no mop enabled
- no mop sysid
-!
-interface GigabitEthernet3
- description Network Interface
  no ip address
  negotiation auto
- no mop enabled
- no mop sysid
+!
+interface GigabitEthernet3
+ description Configured by NETCONF
+ ip address 10.255.255.1 255.255.255.0
+ negotiation auto
 !
 router ospf 111
  router-id 172.31.15.1

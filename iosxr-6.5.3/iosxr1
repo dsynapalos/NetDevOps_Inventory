@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Fri Sep 11 20:24:32 2020 by admin
+!! Last configuration change at Sat Sep 12 20:23:37 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
@@ -37,6 +37,18 @@ call-home
   active
   destination transport-method http
  !
+!
+ipv4 access-list BUSINESS_INTERNET
+ 10 permit ipv4 any 179.60.214.0 0.0.0.255
+ 20 permit ipv4 any 200.7.91.0 0.0.0.255
+ 30 permit ipv4 any 200.7.92.0 0.0.0.255
+ 40 permit ipv4 any 200.7.93.0 0.0.0.255
+ 50 permit ipv4 any 200.7.95.0 0.0.0.255
+ 60 permit ipv4 any 161.0.152.0 0.0.0.255
+ 70 permit ipv4 any 170.84.10.0 0.0.0.255
+ 80 permit ipv4 any 181.118.61.0 0.0.0.255
+ 90 permit ipv4 any 64.119.193.0 0.0.0.255
+ 100 permit ipv4 any 104.153.249.248 0.0.0.3
 !
 interface Bundle-Ether16
  description Connected to F5-BIG-IP-DNS-I2600-01
