@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 13527 bytes
+Current configuration : 13928 bytes
 !
-! Last configuration change at 13:10:31 UTC Sat Sep 12 2020 by developer
+! Last configuration change at 13:10:32 UTC Sun Sep 13 2020 by developer
 !
 version 16.11
 no service timestamps debug uptime
@@ -192,9 +192,24 @@ interface Loopback0
  description via nornir
  no ip address
 !
+interface Loopback11
+ description Configured by Restconf client
+ ip address 11.0.0.11 255.255.255.0 secondary
+ ip address 11.11.11.11 255.255.255.0
+!
+interface Loopback12
+ description Configured by Restconf client
+ ip address 12.12.12.12 255.255.255.0
+!
+interface Loopback21
+ no ip address
+!
 interface Loopback40
  description Configured by Me
  ip address 172.16.10.1 255.255.255.0
+!
+interface Loopback101
+ ip address 10.99.98.1 255.255.255.0
 !
 interface Loopback12000
  description Testing by Reikun
@@ -211,6 +226,7 @@ interface GigabitEthernet1
  spanning-tree portfast
 !
 interface GigabitEthernet2
+ description daniyal
  no ip address
  negotiation auto
 !
@@ -387,7 +403,9 @@ control-plane
 !
 !
 banner exec ^Cexec^C
-banner login ^Clogin^C
+banner login ^C
+Nicolas Cage is the Tiger King
+^C
 banner motd ^Cmotd^C
 !
 line con 0
