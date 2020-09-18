@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Mon Sep 14 03:23:35 2020
-!Time: Mon Sep 14 03:25:20 2020
+!Running configuration last done at: Fri Sep 18 03:08:25 2020
+!Time: Fri Sep 18 03:12:14 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao

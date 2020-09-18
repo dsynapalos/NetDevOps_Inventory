@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 12099 bytes
+Current configuration : 7129 bytes
 !
-! Last configuration change at 13:11:35 UTC Wed Sep 16 2020 by developer
+! Last configuration change at 13:13:56 UTC Fri Sep 18 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -19,7 +19,7 @@ boot-end-marker
 !
 !
 no logging console
-enable secret 9 $9$CkSSZhE93JkWpE$TbVhukF2oILt0n.N95bMAkXQIXGJfmbVu8LyVCdbPHU
+enable secret 9 $9$PvdeTeuxxh0ygk$PSg0GTG2I7bluI51e.IvfEu2uxy56e/9/PgqzFUklso
 !
 no aaa new-model
 call-home
@@ -38,15 +38,6 @@ call-home
 !
 !
 ip domain name abc.inc
-!
-ip dhcp pool DEVCOR
- network 192.0.0.0 255.255.255.0
-!
-ip dhcp pool GLOBOMANTICS_VLAN20
- network 198.51.100.0 255.255.255.0
- default-router 198.51.100.254 
- dns-server 8.8.4.4 8.8.8.8 
- domain-name globomantics.com
 !
 !
 !
@@ -71,8 +62,6 @@ multilink bundle-name authenticated
 !
 !
 !
-chat-script hspa-plus "" "AT!SCACT=1,1" TIMEOUT 60 "OK"
-chat-script lte "" "AT!CALL" TIMEOUT 60 "OK"
 !
 !
 !
@@ -151,14 +140,11 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9TQR9CA26U8
+license udi pid CSR1000V sn 9G4H42BPWGO
 license boot level ax
 diagnostic bootup level minimal
 !
 spanning-tree extend system-id
-archive
- log config
-  hidekeys
 memory free low-watermark processor 80557
 !
 netconf-yang
@@ -168,8 +154,7 @@ restconf
 username developer privilege 15 secret 9 $9$fhUXi6Xg438iAE$..VhXRCHiDQy3K2zmZUl9iZLbQJ9wpUtQZwQxSRESc2
 username cisco privilege 15 secret 9 $9$COf3Q4xfzT.JxE$L3hvSkDv874Qrh8Hzdv/rPQjLNOjreYG2ocffHG7rls
 username root privilege 15 secret 9 $9$FfUDIPBFcs03AE$MyLIWEuiRle8p3yGflAGTcrJA6BUUh/oWtyyfoMQXSI
-username altus secret 9 $9$RaV4ueeBJtKb5.$i9zb7zmB1GZH1bmHjrD4R5RATeD.m.O00Q5./bwyLcM
-username operator
+username marianne privilege 15 password 0 test
 !
 redundancy
 !
@@ -178,29 +163,6 @@ redundancy
 !
 !
 !
-track 1 ip sla 1 reachability
-!
-track 2 list boolean and
- object 1
- object 5
-!
-track 3 list boolean or
- object 4
- object 5
-!
-track 4 ip sla 4 reachability
-!
-track 5 ip sla 5 reachability
-!
-cdp run
-!
-class-map match-all CoPP_CRITICAL
- match access-group name CoPP_CRITICAL
-!
-policy-map CONTROL_PLANE_POLICY
- class CoPP_CRITICAL
-  police 2000000 5000 conform-action drop 
-!
 ! 
 !
 !
@@ -208,77 +170,15 @@ policy-map CONTROL_PLANE_POLICY
 !
 !
 !
-crypto isakmp policy 10
- encr 3des
- authentication pre-share
- group 2
-crypto isakmp key 123456 address 0.0.0.0        
-crypto isakmp keepalive 60
 !
 !
-crypto ipsec transform-set gre_set esp-3des esp-sha-hmac 
- mode transport
 !
-crypto ipsec profile cisco
- set transform-set gre_set 
-!
-!
-bridge irb
 !
 !
 !
 ! 
 ! 
 !
-!
-interface Loopback7
- description ##elblogdelfenia##
- ip address 1.2.3.4 255.255.255.0
-!
-interface Loopback8
- ip address 1.1.1.8 255.255.255.255
-!
-interface Loopback11
- description Loopback generic description
- ip address 11.11.11.11 255.255.255.255
-!
-interface Loopback12
- description *Testing Loopback for Restconf*
- ip address 12.12.12.12 255.255.255.255
-!
-interface Loopback40
- description Configured by Me
- ip address 172.16.10.1 255.255.255.0
-!
-interface Loopback44
- description Loopback44_netconf
- ip address 4.4.4.4 255.255.255.255
-!
-interface Loopback88
- description Configured and Merged by Ansible Network
- no ip address
-!
-interface Loopback99
- description test Asnible Configure.
- no ip address
-!
-interface Tunnel22
- description ISTANBUL_ATM_MPLS
- bandwidth 256
- ip address 172.21.194.239 255.255.248.0
- no ip redirects
- ip mtu 1400
- ip nhrp authentication cc!22
- ip nhrp map 172.21.192.1 192.168.1.2
- ip nhrp map 172.21.192.2 192.168.0.2
- ip nhrp network-id 10022
- ip nhrp holdtime 300
- ip nhrp nhs 172.21.192.1
- ip nhrp nhs 172.21.192.2
- ip tcp adjust-mss 1360
- tunnel mode gre multipoint
- tunnel key 10022
- tunnel protection ipsec profile cisco
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -288,8 +188,9 @@ interface GigabitEthernet1
  no mop sysid
 !
 interface GigabitEthernet2
- description Configured by RESTCONF
- ip address 10.255.255.1 255.255.255.0
+ description Network Interface
+ no ip address
+ shutdown
  negotiation auto
  no mop enabled
  no mop sysid
@@ -297,53 +198,25 @@ interface GigabitEthernet2
 interface GigabitEthernet3
  description Network Interface
  no ip address
+ shutdown
  negotiation auto
  no mop enabled
  no mop sysid
 !
-interface GigabitEthernet3.15
- description TT_VPN over VDSL
- encapsulation dot1Q 15
-!
-!
-router eigrp 12
- network 11.11.11.0 0.0.0.255
- network 12.12.12.0 0.0.0.255
-!
-iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
 ip http secure-server
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
 !
-ip bgp-community new-format
-ip community-list 1 permit 65001:100
-ip ssh time-out 60
 ip ssh rsa keypair-name ssh-key
 ip ssh version 2
 ip scp server enable
 !
 !
-ip access-list extended CoPP_CRITICAL
- permit igmp any 224.0.0.0 15.255.255.255
-ip access-list extended test
- permit ip host 192.0.2.1 any log
- permit ip host 192.0.2.2 any log
- permit ip host 192.0.2.3 any log
- permit ip host 192.0.2.4 any log
- permit ip host 192.0.2.5 any log
-dialer watch-list 1 ip 5.6.7.8 0.0.0.0
-dialer watch-list 1 delay route-check initial 60
-dialer watch-list 1 delay connect 1
 !
 !
-snmp-server group ee v3 priv 
-snmp-server enable traps snmp linkdown linkup
-snmp-server host 1.1.1.1 version 3 priv ee  snmp
 !
-tacacs-server host 1.1.1.1
-tacacs-server key dene123
 !
 !
 control-plane
@@ -352,10 +225,6 @@ control-plane
 !
 !
 !
-banner login ^C
-Nicolas Cage is the
-Tiger King
-^C
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
@@ -368,7 +237,6 @@ Thanks for stopping by.
 !
 line con 0
  exec-timeout 0 0
- logging synchronous
  stopbits 1
 line vty 0 4
  login local
@@ -378,59 +246,12 @@ line vty 0 4
 !
 !
 !
-event manager applet Crypto-APN-4G authorization bypass
- event track 10 state up
- action 01 cli command "en"
- action 02 cli command "cellular 0 lte profile create 1 vakif-atm" pattern "confirm"
- action 03 cli command "y" pattern "confirm"
- action 04 cli command "write"
- action 05 cli command "conf t"
- action 06 cli command "line 3"
- action 07 cli command "script dialer lte"
- action 08 cli command "interface Cellular0"
- action 09 cli command "dialer string lte"
- action 10 cli command "no track 10"
- action 11 cli command "no event manager applet Crypto-APN-4G"
- action 12 cli command "no event manager applet Crypto-APN-3G"
- action 13 cli command "end"
- action 14 cli command "en"
- action 15 cli command "conf t"
- action 16 cli command "crypto key generate rsa modulus 2048"
- action 17 cli command "end"
- action 18 cli command "write"
- action 19 syslog msg "ISLEM_BITTI"
-event manager applet SIM_Slot_Switch authorization bypass
- event tag one track 3 state down maxrun 2000
- event tag two track 3 state up
- trigger occurs 5 period 600
-  correlate event one or event two
-  attribute tag one occurs 1
-  attribute tag two occurs 1
- action 01 cli command "en"
- action 02 while 1 eq 1
- action 03  cli command "show cell 0 all | inc Active SIM"
- action 04  regexp "Active SIM = ([0-9])" "$_cli_result" match slot
- action 05  if $slot eq "0"
- action 06   cli command "cellular 0 gsm sim activate slot 1"
- action 07   cli command "cellular 0 lte sim activate slot 1"
- action 08  else
- action 09   cli command "cellular 0 gsm sim activate slot 0"
- action 10   cli command "cellular 0 lte sim activate slot 0"
- action 11  end
- action 12  syslog msg "SIM_SLOT_SWITCHED"
- action 13  wait 450
- action 14  cli command "show track 3 | i B"
- action 15  regexp "Boolean OR is ([A-Za-z]+)" "$_cli_result" match mfc
- action 16  if $mfc eq "Up"
- action 17   syslog msg "SIM_Success"
- action 18   break
- action 19  else
- action 20   syslog msg "SIM_Fail"
- action 21  end
- action 22 end
 !
-!
-app-hosting appid guestshell
- app-vnic management guest-interface 0
-  guest-ipaddress 10.10.20.48 netmask 255.255.255.0
+telemetry ietf subscription 1000
+ encoding encode-kvgpb
+ filter xpath /process-cpu-ios-xe-oper:cpu-usage/cpu-utilization/five-seconds
+ source-address 10.10.20.48
+ stream yang-push
+ update-policy periodic 500
+ receiver ip address 10.10.20.1 57000 protocol grpc-tcp
 end
