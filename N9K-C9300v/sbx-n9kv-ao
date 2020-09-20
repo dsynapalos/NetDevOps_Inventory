@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Fri Sep 18 03:08:25 2020
-!Time: Fri Sep 18 03:12:14 2020
+!Running configuration last done at: Sun Sep 20 03:01:27 2020
+!Time: Sun Sep 20 03:04:53 2020
 
 version 9.3(3) Bios:version  
 hostname sbx-n9kv-ao
@@ -108,11 +108,13 @@ interface Vlan1
 
 interface Vlan100
   description mgmt svi - DEMO PLEASE DON'T TOUCH
+  no shutdown
   ip address 172.16.100.1/24
   ip router ospf 1 area 0.0.0.0
 
 interface Vlan101
   description prod svi - DEMO PLEASE DON'T TOUCH
+  no shutdown
   ip address 172.16.101.1/24
   ip router ospf 1 area 0.0.0.0
 
@@ -314,4 +316,5 @@ router bgp 65535
   neighbor 172.16.0.2
     remote-as 65535
 
+logging monitor 6
 no logging console
