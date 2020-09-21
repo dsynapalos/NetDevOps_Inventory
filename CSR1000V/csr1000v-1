@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 8119 bytes
+Current configuration : 7318 bytes
 !
-! Last configuration change at 13:13:23 UTC Sun Sep 20 2020 by NETCONF
+! Last configuration change at 13:10:38 UTC Mon Sep 21 2020 by developer
 !
 version 16.11
 service timestamps debug datetime msec
@@ -17,7 +17,6 @@ hostname csr1000v-1
 boot-start-marker
 boot-end-marker
 !
-shell processing full
 !
 no logging console
 enable secret 9 $9$PvdeTeuxxh0ygk$PSg0GTG2I7bluI51e.IvfEu2uxy56e/9/PgqzFUklso
@@ -39,12 +38,6 @@ call-home
 !
 !
 ip domain name abc.inc
-!
-ip dhcp pool GLOBOMANTICS_VLAN20
- network 198.51.100.0 255.255.255.0
- default-router 198.51.100.254 
- dns-server 8.8.4.4 8.8.8.8 
- domain-name globomantics.com
 !
 !
 !
@@ -147,16 +140,13 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9G4H42BPWGO
+license udi pid CSR1000V sn 9DBKKIS87RJ
 license boot level ax
 diagnostic bootup level minimal
-
-et-analytics
 !
 spanning-tree extend system-id
 memory free low-watermark processor 80557
 !
-netconf-yang feature candidate-datastore
 netconf-yang
 !
 restconf
@@ -164,8 +154,6 @@ restconf
 username developer privilege 15 secret 9 $9$fhUXi6Xg438iAE$..VhXRCHiDQy3K2zmZUl9iZLbQJ9wpUtQZwQxSRESc2
 username cisco privilege 15 secret 9 $9$COf3Q4xfzT.JxE$L3hvSkDv874Qrh8Hzdv/rPQjLNOjreYG2ocffHG7rls
 username root privilege 15 secret 9 $9$FfUDIPBFcs03AE$MyLIWEuiRle8p3yGflAGTcrJA6BUUh/oWtyyfoMQXSI
-username marianne privilege 15 password 0 test
-username vlad secret 9 $9$fbhaAKNKoz6pXU$XLMcFRDQA1LQ.7DitVhxXby2eyBB1veBsIuZNy4SnNc
 !
 redundancy
 !
@@ -174,7 +162,6 @@ redundancy
 !
 !
 !
-cdp run
 ! 
 !
 !
@@ -191,16 +178,6 @@ cdp run
 ! 
 ! 
 !
-!
-interface Loopback1
- description LLLLLopback
- ip address 10.10.15.49 255.255.255.0 secondary
- ip address 10.10.16.49 255.255.255.0 secondary
- ip address 10.10.14.48 255.255.255.0
-!
-interface Loopback101
- description Added for test!
- ip address 172.16.0.55 255.255.255.0
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -217,6 +194,8 @@ interface GigabitEthernet2
  no mop enabled
  no mop sysid
 !
+interface GigabitEthernet2.1
+!
 interface GigabitEthernet3
  description Network Interface
  no ip address
@@ -225,7 +204,6 @@ interface GigabitEthernet3
  no mop enabled
  no mop sysid
 !
-iox
 ip forward-protocol nd
 ip http server
 ip http authentication local
@@ -257,25 +235,20 @@ control-plane
 !
 !
 !
+banner exec ^CJames is the best^C
+banner login ^CJames is the best^C
+banner motd ^CJames is the best^C
 !
 line con 0
  exec-timeout 0 0
  stopbits 1
 line vty 0 4
  login local
- transport input ssh
-!
-netconf ssh
+ transport input all
 !
 !
 !
 !
 !
-telemetry ietf subscription 1000
- encoding encode-kvgpb
- filter xpath /process-cpu-ios-xe-oper:cpu-usage/cpu-utilization/five-seconds
- source-address 10.10.20.48
- stream yang-push
- update-policy periodic 500
- receiver ip address 10.10.20.1 57000 protocol grpc-tcp
+!
 end

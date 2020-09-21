@@ -1,6 +1,6 @@
 Building configuration...
 !! IOS XR Configuration version = 6.5.3
-!! Last configuration change at Sun Sep 20 20:55:24 2020 by admin
+!! Last configuration change at Mon Sep 21 20:55:29 2020 by admin
 !
 hostname iosxr1
 domain name abc.inc
@@ -8,6 +8,16 @@ username admin
  group root-lr
  group cisco-support
  secret 5 $1$oN8e$ft916PCBogrqPKt59kepW0
+!
+vrf OBEC
+ address-family ipv4 unicast
+  import route-target
+   4621:7
+  !
+  export route-target
+   4621:7
+  !
+ !
 !
 tpa
  vrf default
@@ -67,9 +77,39 @@ interface GigabitEthernet0/0/0/5
 interface GigabitEthernet0/0/0/6
  shutdown
 !
+route-policy Royal_police_Ac
+  if as-path in (ios-regex '_138003$') and destination in (202.29.103.0/24 le 24) then
+    set community (4621:41100, 4621:61111) additive
+    set local-preference 120
+  endif
+end-policy
+!
+route-policy Internet_Default_Only
+  if as-path in (ios-regex '^4651') and destination in (0.0.0.0/0) then
+    pass
+  endif
+  if not as-path in (ios-regex '^4651') then
+    pass
+  endif
+end-policy
+!
 router static
  address-family ipv4 unicast
   0.0.0.0/0 10.10.20.254
+  1.1.1.0/24 10.10.20.254
+  2.2.2.0/24 GigabitEthernet0/0/0/2 10.10.20.254 200 tag 300 permanent description TEST
+ !
+ address-family ipv6 unicast
+  2403:6100:7410:250::/60 2403:6100:7400:4621:7410:250:0:2
+  2403:6100:7410:350::/60 GigabitEthernet0/0/0/2 2403:6100:7400:4621:7410:350:0:2 tag 300 permanent description TESTIPV6
+ !
+ vrf OBEC
+  address-family ipv4 unicast
+   1.1.1.0/24 GigabitEthernet0/0/0/4 10.10.20.254 200 tag 300 permanent description TEST
+  !
+  address-family ipv6 unicast
+   2403:6100:7410:250::/60 GigabitEthernet0/0/0/3 2403:6100:7400:4621:7410:250:0:2 tag 300 permanent description TESTIPV6
+  !
  !
 !
 xml agent tty
